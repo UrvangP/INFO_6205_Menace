@@ -1,5 +1,6 @@
 import java.util.HashMap;
 import java.util.ArrayList;
+//import *.CSVGenerator;
 
 public class BaseState {
     public BaseState() {
@@ -18,28 +19,36 @@ public class BaseState {
     }
 
     public Boolean isValidWinWinMove(String state) {
-        String question = "";
-        String strToCompare = "";
+        ArrayList<String> temp = new ArrayList<String>();
+
         for (int i = 0; i < state.length(); i++) {
             String current = String.valueOf(state.charAt(i));
-            if (current.equals("0")) {
-                strToCompare += "#";
-                continue;
-            }
-
-            if (question.equals("")) {
-                question = current;
-            }
-
-            if (question.equals(current)) {
-                strToCompare += "?";
-            } else {
-                strToCompare += "%";
+            if (!current.equals("0")) {
+                temp.add(current);
             }
         }
 
-        System.out.println("strToCompare" + strToCompare);
-        return this.allWinWinStates.containsKey(strToCompare);
+        for (int j = 0; j < temp.size(); j++) {
+            String question = temp.get(j);
+            String strToCompare = "";
+            for (int i = 0; i < state.length(); i++) {
+                String current = String.valueOf(state.charAt(i));
+                if (current.equals("0")) {
+                    strToCompare += "#";
+                    continue;
+                }
+
+                if (question.equals(current)) {
+                    strToCompare += "?";
+                } else {
+                    strToCompare += "#";
+                }
+            }
+//            System.out.println("strToCompare" + strToCompare);
+            if (this.allWinWinStates.containsKey(strToCompare)) return true;
+        }
+
+        return false;
     }
 
 
@@ -63,16 +72,17 @@ public class BaseState {
             i++;
         }
 
+        // result is an object with valid and data(available spots)
         HashMap<String, Object> result = new HashMap<String, Object>();
         result.put("data", temp);
 
+        //if no one played
         if (xs == 0 && os == 0) {
             result.put("val", false);
             return result;
         }
 
-
-        if (xs == os || xs == (os - 1) || os == (xs - 1)) {
+        if (xs == os) {
             result.put("val", true);
             return result;
         }
@@ -87,16 +97,16 @@ public class BaseState {
             HashMap<String, Object> data = this.verify(track);
             if (data.get("val").equals(true)) {
                 String encoded = this.concatenateMe(track);
+//                System.out.println("!!!encoded" + encoded);
                 if (!isValidWinWinMove(encoded)) this.allCombinations.put(encoded, data.get("data"));
             }
             return;
         }
-        for (int i = 0; i < this.allMoves.length; i++) {
 
+        for (int i = 0; i < this.allMoves.length; i++) {
             track.add(this.allMoves[i]);
             this.compute(track);
             track.remove(track.size() - 1);
-
         }
     }
 
@@ -109,11 +119,31 @@ public class BaseState {
     }
 
     public HashMap<String, Object> getAllCombinations() {
+        HashMap<String, Object> temp = new HashMap<String, Object>();
+
+        ArrayList<String> combinations = new ArrayList<String>();
+        ArrayList<Object> available = new ArrayList<Object>();
+
+        for (HashMap.Entry<String, Object> entry : this.allCombinations.entrySet()) {
+            combinations.add(entry.getKey());
+            available.add(entry.getValue());
+        }
+
+        temp.put("combination", combinations);
+        temp.put("available", available);
+
+        this.printCSV("combinations", temp);
+
         return this.allCombinations;
     }
 
     public HashMap<String, Boolean> getWinWinStates() {
         return this.allWinWinStates;
+    }
+
+    public void printCSV(String fileName, HashMap<String, Object> data) {
+        CSV csvInstance = new CSV();
+        csvInstance.generateCSV(fileName, data);
     }
 
     private HashMap<String, Boolean> allWinWinStates = new HashMap<String, Boolean>();

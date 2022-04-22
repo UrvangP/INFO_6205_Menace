@@ -8,8 +8,8 @@ public class MenaceBegin extends BaseState {
         Boolean isValid = baseInstance.isValidWinWinMove("120102100");
 
         System.out.println("isValid:- " + isValid);
-//        baseInstance.generateMoves();
-//        baseInstance.compute(new ArrayList<String>());
+        baseInstance.generateMoves();
+        baseInstance.compute(new ArrayList<String>());
 //        for (Map.Entry<String, Boolean> entry : baseInstance.getWinWinStates().entrySet()) {
 //            System.out.println(entry.getKey() + " = " + entry.getValue());
 //        }
