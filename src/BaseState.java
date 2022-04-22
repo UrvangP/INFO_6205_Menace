@@ -82,7 +82,7 @@ public class BaseState {
             return result;
         }
 
-        if (xs == os) {
+        if ((xs + os > 4) && xs == os) {
             result.put("val", true);
             return result;
         }
