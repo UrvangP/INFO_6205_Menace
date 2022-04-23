@@ -32,18 +32,32 @@ public class CSV {
     public void generateRows(StringBuilder sb, HashMap<String, Object> data) {
         int start = 0;
         int i = 0;
-        while (i < 2) {
+        while (true) {
             for (Object value : data.values()) {
                 ArrayList<Object> temp = (ArrayList) value;
-                if (start < 0 || start >= temp.size()) break;
+                if (start < 0 || start >= temp.size()) return;
+                //TODO
+//                if (temp.get(start) instanceof ArrayList) {
+//                    String str = concatenateMe((ArrayList<String>) temp.get(start));
+//                    sb.append(str);
+//
+//                } else {
                 sb.append(temp.get(start));
+//                }
                 sb.append(',');
-//                System.out.println("Value = " + temp.get(start));
             }
-
             sb.append('\n');
             start++;
             i++;
         }
+    }
+
+
+    public String concatenateMe(ArrayList<String> arr) {
+        String str = new String();
+        for (int i = 0; i < arr.size(); i++) {
+            str += arr.get(i);
+        }
+        return str;
     }
 }

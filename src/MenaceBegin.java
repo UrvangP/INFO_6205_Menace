@@ -1,6 +1,6 @@
 import java.util.*;
 
-public class MenaceBegin extends BaseState {
+public class MenaceBegin {
 
     public static void main(String[] args) {
         BaseState baseInstance = new BaseState();

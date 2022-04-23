@@ -1,10 +1,10 @@
 import java.util.HashMap;
 import java.util.ArrayList;
-//import *.CSVGenerator;
 
 public class BaseState {
     public BaseState() {
         this.createWinWinStates();
+        this.addAllRotations();
     }
 
     private void createWinWinStates() {
@@ -16,6 +16,34 @@ public class BaseState {
         this.allWinWinStates.put("##?##?##?", true);
         this.allWinWinStates.put("##?#?#?##", true);
         this.allWinWinStates.put("#?##?##?#", true);
+    }
+
+    private Boolean isAlreadyPresent(int[] combination, String toCompare) {
+        String str = "";
+        for (int i = 0; i < combination.length; i++) {
+            str += toCompare.charAt(combination[i]);
+        }
+        return this.allCombinations.containsKey(str);
+    }
+
+    private void addAllRotations() {
+        this.allRotations[0] = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8};
+        this.allRotations[1] = new int[]{0, 3, 6, 1, 4, 7, 2, 5, 8};
+        this.allRotations[2] = new int[]{6, 3, 0, 7, 4, 1, 8, 5, 2};
+        this.allRotations[3] = new int[]{6, 7, 8, 3, 4, 5, 0, 1, 2};
+        this.allRotations[4] = new int[]{8, 7, 6, 5, 4, 3, 2, 1, 0};
+        this.allRotations[5] = new int[]{8, 5, 2, 7, 4, 1, 6, 3, 0};
+        this.allRotations[6] = new int[]{2, 5, 8, 1, 4, 7, 0, 3, 6};
+        this.allRotations[7] = new int[]{2, 1, 0, 5, 4, 3, 8, 7, 6};
+    }
+
+
+    public Boolean isValidUniqueRotation(String encoded) {
+        for (int i = 0; i < this.allRotations.length; i++) {
+            Boolean isValid = isAlreadyPresent(this.allRotations[i], encoded);
+            if (isValid) return false;
+        }
+        return true;
     }
 
     public Boolean isValidWinWinMove(String state) {
@@ -44,7 +72,6 @@ public class BaseState {
                     strToCompare += "#";
                 }
             }
-//            System.out.println("strToCompare" + strToCompare);
             if (this.allWinWinStates.containsKey(strToCompare)) return true;
         }
 
@@ -82,7 +109,8 @@ public class BaseState {
             return result;
         }
 
-        if ((xs + os > 4) && xs == os) {
+        // xs = os // considering menace plays first
+        if ((xs + os) % 2 == 0 && xs == os) {
             result.put("val", true);
             return result;
         }
@@ -98,7 +126,8 @@ public class BaseState {
             if (data.get("val").equals(true)) {
                 String encoded = this.concatenateMe(track);
 //                System.out.println("!!!encoded" + encoded);
-                if (!isValidWinWinMove(encoded)) this.allCombinations.put(encoded, data.get("data"));
+                if (!isValidWinWinMove(encoded) && isValidUniqueRotation(encoded))
+                    this.allCombinations.put(encoded, data.get("data"));
             }
             return;
         }
@@ -150,5 +179,5 @@ public class BaseState {
     private String[] allMoves = new String[]{"0", "1", "2"};
     private Integer validLettersTTT = 9;
     private HashMap<String, Object> allCombinations = new HashMap<String, Object>();
-
+    private int[][] allRotations = new int[8][9];
 }
