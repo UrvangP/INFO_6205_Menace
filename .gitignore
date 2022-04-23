@@ -32,3 +32,6 @@ bin/*
 .settings
 
 *.kml
+
+.DSStore
+.metadeta

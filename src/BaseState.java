@@ -1,7 +1,7 @@
-import java.util.HashMap;
-import java.util.ArrayList;
+import java.util.*;
 
 public class BaseState {
+
     public BaseState() {
         this.createWinWinStates();
         this.addAllRotations();
@@ -47,7 +47,7 @@ public class BaseState {
     }
 
     public Boolean isValidWinWinMove(String state) {
-        ArrayList<String> temp = new ArrayList<String>();
+        List<String> temp = new ArrayList<String>();
 
         for (int i = 0; i < state.length(); i++) {
             String current = String.valueOf(state.charAt(i));
@@ -85,11 +85,11 @@ public class BaseState {
         }
     }
 
-    public HashMap<String, Object> verify(ArrayList<String> state) {
+    public Map<String, Object> verify(ArrayList<String> state) {
         int xs = 0;
         int os = 0;
         int i = 0;
-        ArrayList<Integer> temp = new ArrayList<Integer>();
+        List<Integer> temp = new ArrayList<Integer>();
 
         while (i < state.size()) {
             String curr = state.get(i);
@@ -100,7 +100,7 @@ public class BaseState {
         }
 
         // result is an object with valid and data(available spots)
-        HashMap<String, Object> result = new HashMap<String, Object>();
+        Map<String, Object> result = new HashMap<String, Object>();
         result.put("data", temp);
 
         //if no one played
@@ -120,9 +120,9 @@ public class BaseState {
     }
 
 
-    public void compute(ArrayList<String> track) {
+    public void compute(List<String> track) {
         if (track.size() == this.validLettersTTT) {
-            HashMap<String, Object> data = this.verify(track);
+            Map<String, Object> data = this.verify(track);
             if (data.get("val").equals(true)) {
                 String encoded = this.concatenateMe(track);
 //                System.out.println("!!!encoded" + encoded);
@@ -139,7 +139,7 @@ public class BaseState {
         }
     }
 
-    public String concatenateMe(ArrayList<String> arr) {
+    public String concatenateMe(List<String> arr) {
         String str = new String();
         for (int i = 0; i < arr.size(); i++) {
             str += arr.get(i);
@@ -147,13 +147,13 @@ public class BaseState {
         return str;
     }
 
-    public HashMap<String, Object> getAllCombinations() {
-        HashMap<String, Object> temp = new HashMap<String, Object>();
+    public Map<String, Object> getAllCombinations() {
+        Map<String, Object> temp = new HashMap<String, Object>();
 
-        ArrayList<String> combinations = new ArrayList<String>();
-        ArrayList<Object> available = new ArrayList<Object>();
+        List<String> combinations = new ArrayList<String>();
+        List<Object> available = new ArrayList<Object>();
 
-        for (HashMap.Entry<String, Object> entry : this.allCombinations.entrySet()) {
+        for (Map.Entry<String, Object> entry : this.allCombinations.entrySet()) {
             combinations.add(entry.getKey());
             available.add(entry.getValue());
         }
@@ -166,18 +166,18 @@ public class BaseState {
         return this.allCombinations;
     }
 
-    public HashMap<String, Boolean> getWinWinStates() {
+    public Map<String, Boolean> getWinWinStates() {
         return this.allWinWinStates;
     }
 
-    public void printCSV(String fileName, HashMap<String, Object> data) {
+    public void printCSV(String fileName, Map<String, Object> data) {
         CSV csvInstance = new CSV();
         csvInstance.generateCSV(fileName, data);
     }
 
-    private HashMap<String, Boolean> allWinWinStates = new HashMap<String, Boolean>();
+    private Map<String, Boolean> allWinWinStates = new HashMap<String, Boolean>();
     private String[] allMoves = new String[]{"0", "1", "2"};
     private Integer validLettersTTT = 9;
-    private HashMap<String, Object> allCombinations = new HashMap<String, Object>();
+    private Map<String, Object> allCombinations = new HashMap<String, Object>();
     private int[][] allRotations = new int[8][9];
 }

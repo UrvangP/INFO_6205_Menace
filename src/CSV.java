@@ -1,15 +1,14 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
-import java.util.HashMap;
-import java.util.ArrayList;
+import java.util.*;
 
 public class CSV {
 
     public CSV() {
     }
 
-    public void generateCSV(String fileName, HashMap<String, Object> data) {
+    public void generateCSV(String fileName, Map<String, Object> data) {
         try (PrintWriter writer = new PrintWriter(fileName + ".csv")) {
             StringBuilder sb = new StringBuilder();
             this.generateColumns(sb, data);
@@ -21,7 +20,7 @@ public class CSV {
         }
     }
 
-    public void generateColumns(StringBuilder sb, HashMap<String, Object> data) {
+    public void generateColumns(StringBuilder sb, Map<String, Object> data) {
         for (String key : data.keySet()) {
             sb.append(key);
             sb.append(',');
@@ -29,12 +28,12 @@ public class CSV {
         sb.append('\n');
     }
 
-    public void generateRows(StringBuilder sb, HashMap<String, Object> data) {
+    public void generateRows(StringBuilder sb, Map<String, Object> data) {
         int start = 0;
         int i = 0;
         while (true) {
             for (Object value : data.values()) {
-                ArrayList<Object> temp = (ArrayList) value;
+                List<Object> temp = (List) value;
                 if (start < 0 || start >= temp.size()) return;
                 //TODO
 //                if (temp.get(start) instanceof ArrayList) {
@@ -54,7 +53,7 @@ public class CSV {
 
 
     public String concatenateMe(ArrayList<String> arr) {
-        String str = new String();
+        String str = "";
         for (int i = 0; i < arr.size(); i++) {
             str += arr.get(i);
         }
