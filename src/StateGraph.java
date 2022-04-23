@@ -23,10 +23,6 @@ public class StateGraph {
         serialStateMap.put( firstState.getSerial(), firstState );
         while( !graphQ.isEmpty() ){
             String currentSerial = graphQ.poll();
-//            System.out.println(currentSerial);
-//            if("2#2#1#1#1#1#0#0#0#".equals(currentSerial)){
-//                System.out.println("found");
-//            }
 
             State currentState = serialStateMap.get(currentSerial);
             int[] board = currentState.getBoard();
