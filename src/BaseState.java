@@ -85,17 +85,17 @@ public class BaseState {
         }
     }
 
-    public Map<String, Object> verify(ArrayList<String> state) {
+    public Map<String, Object> verify(ArrayList<Integer> state) {
         int xs = 0;
         int os = 0;
         int i = 0;
         List<Integer> temp = new ArrayList<Integer>();
 
         while (i < state.size()) {
-            String curr = state.get(i);
-            if (curr.equals("1")) xs++;
-            if (curr.equals("2")) os++;
-            if (curr.equals("0")) temp.add(i);
+            Integer curr = state.get(i);
+            if (curr.equals(1)) xs++;
+            if (curr.equals(2)) os++;
+            if (curr.equals(0)) temp.add(i);
             i++;
         }
 
@@ -120,14 +120,26 @@ public class BaseState {
     }
 
 
-    public void compute(List<String> track) {
+    public ArrayList<Integer> getCustomSizeValue(ArrayList<Integer> data) {
+        if (data.size() == (this.initialSizeAvailabilityArray)) return data;
+        int i = 0;
+        int j = 0;
+        int until = this.initialSizeAvailabilityArray - data.size();
+        while (i < until) {
+            data.add(data.get(j));
+            i++;
+            j++;
+        }
+        return data;
+    }
+
+    public void compute(List<Integer> track) {
         if (track.size() == this.validLettersTTT) {
-            Map<String, Object> data = this.verify(track);
+            Map<String, Object> data = this.verify((ArrayList<Integer>) track);
             if (data.get("val").equals(true)) {
                 String encoded = this.concatenateMe(track);
-//                System.out.println("!!!encoded" + encoded);
                 if (!isValidWinWinMove(encoded) && isValidUniqueRotation(encoded))
-                    this.allCombinations.put(encoded, data.get("data"));
+                    this.allCombinations.put(encoded, getCustomSizeValue((ArrayList<Integer>) data.get("data")));
             }
             return;
         }
@@ -139,7 +151,7 @@ public class BaseState {
         }
     }
 
-    public String concatenateMe(List<String> arr) {
+    public String concatenateMe(List<Integer> arr) {
         String str = new String();
         for (int i = 0; i < arr.size(); i++) {
             str += arr.get(i);
@@ -147,13 +159,13 @@ public class BaseState {
         return str;
     }
 
-    public Map<String, Object> getAllCombinations() {
+    public Map<String, ArrayList<Integer>> getAllCombinations() {
         Map<String, Object> temp = new HashMap<String, Object>();
 
         List<String> combinations = new ArrayList<String>();
         List<Object> available = new ArrayList<Object>();
 
-        for (Map.Entry<String, Object> entry : this.allCombinations.entrySet()) {
+        for (Map.Entry<String, ArrayList<Integer>> entry : this.allCombinations.entrySet()) {
             combinations.add(entry.getKey());
             available.add(entry.getValue());
         }
@@ -175,9 +187,73 @@ public class BaseState {
         csvInstance.generateCSV(fileName, data);
     }
 
+    public ArrayList<Integer> getAllAvailablePositions(String state) {
+        if (!this.allCombinations.containsKey(state)) return new ArrayList<Integer>();
+        return (ArrayList<Integer>) this.allCombinations.get(state);
+    }
+
+    public Integer getRandomAvailableColor(ArrayList<Integer> options) {
+        int random = new Random().nextInt(options.size());
+        return options.get(random);
+    }
+
+    public String getSerialized2Dto1D(int[][] state) {
+        String str = "";
+        for (int i = 0; i < state.length; ++i) {
+            for (int j = 0; j < state[i].length; ++j) {
+                str += state[i][j];
+            }
+        }
+        return str;
+    }
+
+    public int[][] resetBoard() {
+        int[][] board = new int[3][3];
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[i].length; j++) {
+                board[i][j] = 0;
+            }
+        }
+        return board;
+    }
+
+    public ArrayList<Integer> getAvailableSpotsOnBoard(String board) {
+        List available = new ArrayList<Integer>();
+        for (int i = 0; i < board.length(); i++) {
+            if (board.charAt(i) == '0') {
+                available.add(i);
+            }
+        }
+        return (ArrayList<Integer>) available;
+    }
+
+    public ArrayList<Integer> convertStringToArray(String state) {
+        List<Integer> board = new ArrayList<Integer>();
+        for (int i = 0; i < state.length(); i++) {
+            if (state.charAt(i) == '0') board.add(Integer.valueOf(state.charAt(i)));
+        }
+        return (ArrayList<Integer>) board;
+    }
+
+
+    public ArrayList<Integer> getAvailableMove(String state) {
+        ArrayList<Integer> available = this.allCombinations.get(state);
+        if (available != null) {
+            return available;
+        } else {
+            ArrayList<Integer> temp = new ArrayList<>();
+            temp.add(getRandomAvailableColor(getAvailableSpotsOnBoard(state)));
+            return temp;
+        }
+    }
+
     private Map<String, Boolean> allWinWinStates = new HashMap<String, Boolean>();
-    private String[] allMoves = new String[]{"0", "1", "2"};
+    private Integer[] allMoves = new Integer[]{0, 1, 2};
     private Integer validLettersTTT = 9;
-    private Map<String, Object> allCombinations = new HashMap<String, Object>();
+    private Map<String, ArrayList<Integer>> allCombinations = new HashMap<String, ArrayList<Integer>>();
     private int[][] allRotations = new int[8][9];
+    private int initialSizeAvailabilityArray = 9; //alpha
+    private int addWhenWin = 3; //beta
+    private int removeWhenLose = 1; //gamma
+    private int addWhenDraw = 1; //delta
 }

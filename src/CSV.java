@@ -35,14 +35,11 @@ public class CSV {
             for (Object value : data.values()) {
                 List<Object> temp = (List) value;
                 if (start < 0 || start >= temp.size()) return;
-                //TODO
-//                if (temp.get(start) instanceof ArrayList) {
-//                    String str = concatenateMe((ArrayList<String>) temp.get(start));
-//                    sb.append(str);
-//
-//                } else {
-                sb.append(temp.get(start));
-//                }
+                if (temp.get(start) instanceof ArrayList<?>) {
+                    sb.append(concatenateMe((ArrayList<?>) temp.get(start)));
+                } else {
+                    sb.append(temp.get(start));
+                }
                 sb.append(',');
             }
             sb.append('\n');
@@ -52,7 +49,7 @@ public class CSV {
     }
 
 
-    public String concatenateMe(ArrayList<String> arr) {
+    public String concatenateMe(ArrayList<?> arr) {
         String str = "";
         for (int i = 0; i < arr.size(); i++) {
             str += arr.get(i);
