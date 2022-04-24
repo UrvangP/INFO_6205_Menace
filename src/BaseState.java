@@ -7,14 +7,14 @@ public class BaseState extends Utils {
     }
 
     private void createWinWinStates() {
-        this.allWinWinStates.put("???######", true);
-        this.allWinWinStates.put("?##?##?##", true);
-        this.allWinWinStates.put("?###?###?", true);
-        this.allWinWinStates.put("###???###", true);
-        this.allWinWinStates.put("######???", true);
-        this.allWinWinStates.put("##?##?##?", true);
-        this.allWinWinStates.put("##?#?#?##", true);
-        this.allWinWinStates.put("#?##?##?#", true);
+        this.allWinWinStates[0] = new int[]{0, 1, 2};
+        this.allWinWinStates[1] = new int[]{3, 4, 5};
+        this.allWinWinStates[2] = new int[]{6, 7, 8};
+        this.allWinWinStates[3] = new int[]{0, 3, 6};
+        this.allWinWinStates[4] = new int[]{1, 4, 7};
+        this.allWinWinStates[5] = new int[]{2, 5, 8};
+        this.allWinWinStates[6] = new int[]{0, 4, 8};
+        this.allWinWinStates[7] = new int[]{6, 4, 2};
     }
 
     private Boolean isAlreadyPresent(int[] combination, String toCompare) {
@@ -46,34 +46,14 @@ public class BaseState extends Utils {
     }
 
     public Boolean isValidWinWinMove(String state) {
-        List<String> temp = new ArrayList<String>();
-
-        for (int i = 0; i < state.length(); i++) {
-            String current = String.valueOf(state.charAt(i));
-            if (!current.equals("0")) {
-                temp.add(current);
+        for (int i = 0; i < this.allWinWinStates.length; i++) {
+            Integer first = this.allWinWinStates[i][0];
+            Integer second = this.allWinWinStates[i][1];
+            Integer third = this.allWinWinStates[i][2];
+            if (state.charAt(first) != '0' && (state.charAt(first) == state.charAt(second)) && (state.charAt(second) == state.charAt(third))) {
+                return true;
             }
         }
-
-        for (int j = 0; j < temp.size(); j++) {
-            String question = temp.get(j);
-            String strToCompare = "";
-            for (int i = 0; i < state.length(); i++) {
-                String current = String.valueOf(state.charAt(i));
-                if (current.equals("0")) {
-                    strToCompare += "#";
-                    continue;
-                }
-
-                if (question.equals(current)) {
-                    strToCompare += "?";
-                } else {
-                    strToCompare += "#";
-                }
-            }
-            if (this.allWinWinStates.containsKey(strToCompare)) return true;
-        }
-
         return false;
     }
 
@@ -160,7 +140,6 @@ public class BaseState extends Utils {
         }
     }
 
-
     public Map<String, ArrayList<Integer>> getAllCombinations() {
         Map<String, Object> temp = new HashMap<String, Object>();
 
@@ -180,7 +159,7 @@ public class BaseState extends Utils {
         return this.allCombinations;
     }
 
-    public Map<String, Boolean> getWinWinStates() {
+    public int[][] getWinWinStates() {
         return this.allWinWinStates;
     }
 
@@ -241,7 +220,7 @@ public class BaseState extends Utils {
         return (ArrayList<Integer>) available;
     }
 
-    private Map<String, Boolean> allWinWinStates = new HashMap<String, Boolean>();
+    private int[][] allWinWinStates = new int[8][3];
     private Integer[] allMoves = new Integer[]{0, 1, 2};
     private Integer validLettersTTT = 9;
     private Map<String, ArrayList<Integer>> allCombinations = new HashMap<String, ArrayList<Integer>>();
