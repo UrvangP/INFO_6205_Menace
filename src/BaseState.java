@@ -100,15 +100,20 @@ public class BaseState extends Utils {
 
     public ArrayList<Integer> getCustomSizeValue(ArrayList<Integer> data) {
         if (data.size() == (this.initialSizeAvailabilityArray)) return data;
-        int i = 0;
-        int j = 0;
-        int until = this.initialSizeAvailabilityArray - data.size();
-        while (i < until) {
-            data.add(data.get(j));
-            i++;
-            j++;
+
+        List<Integer> value = new ArrayList<Integer>();
+
+        for (int i = 0; i < this.validLettersTTT; i++) {
+            value.add(0);
         }
-        return data;
+
+        int i = 0;
+        while (i < data.size()) {
+            value.set(data.get(i), this.initialSizeAvailabilityArray);
+            i++;
+        }
+
+        return (ArrayList<Integer>) value;
     }
 
     /**

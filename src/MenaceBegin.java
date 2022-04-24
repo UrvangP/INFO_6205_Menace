@@ -15,15 +15,6 @@ public class MenaceBegin {
         int randomPosition = baseInstance.getRandomAvailableColor(availablePositions);
         System.out.println("Random No. " + randomPosition);
 
-
-//        for (Map.Entry<String, Boolean> entry : baseInstance.getWinWinStates().entrySet()) {
-//            System.out.println(entry.getKey() + " = " + entry.getValue());
-//        }
-
-//        for (Map.Entry<String, Object> entry : baseInstance.getAllCombinations().entrySet()) {
-//            System.out.println(entry.getKey() + " = " + entry.getValue());
-//        }
-
         System.out.println("total combinations: " + baseInstance.getAllCombinations().size());
 
 
