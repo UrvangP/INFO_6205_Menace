@@ -8,7 +8,7 @@ public class MenaceBegin {
         System.out.println("120102100 isValid:- " + isValid);
 //        baseInstance.generateMoves();
         baseInstance.compute(new ArrayList<Integer>());
-        ArrayList<Integer> availablePositions = baseInstance.getAllAvailablePositions("001002210");
+        List<Integer> availablePositions = baseInstance.getAllAvailablePositions("001002210");
         for (int i = 0; i < availablePositions.size(); i++) {
             System.out.println(availablePositions.get(i));
         }
@@ -26,14 +26,22 @@ public class MenaceBegin {
              * EMPTY - 0
              */
             int[][] board = baseInstance.resetBoard();
+            Human human = new Human(board);
             int chance = 0;
 
             String toCheckWin = "";
             while (chance < 9) {
                 String serial = baseInstance.getSerialized2Dto1D(board);
-                ArrayList<Integer> positionsToPlay = turn ? baseInstance.getAvailableSpotsOnBoard(serial) : baseInstance.getAvailableMove(serial);
-                int rand = baseInstance.getRandomAvailableColor(positionsToPlay);
-                board[(int) Math.floor(rand / 3)][rand % 3] = !turn ? 1 : 2;
+
+                if(!turn){
+                    List<Integer> positionsToPlay = baseInstance.getAvailableMove(serial);
+                    int rand = baseInstance.getRandomAvailableColor(positionsToPlay);
+                    board[(int) Math.floor(rand / 3)][rand % 3] = !turn ? 1 : 2;
+                }
+                else{
+                    human.play();
+                }
+
 
                 toCheckWin = baseInstance.getSerialized2Dto1D((board));
                 if (baseInstance.isValidWinWinMove(toCheckWin)) {

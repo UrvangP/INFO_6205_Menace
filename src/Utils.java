@@ -26,7 +26,7 @@ public class Utils {
      * @param options
      * @return
      */
-    public Integer getRandomAvailableColor(ArrayList<Integer> options) {
+    public Integer getRandomAvailableColor(List<Integer> options) {
         int random = new Random().nextInt(options.size());
         return options.get(random);
     }
@@ -78,4 +78,10 @@ public class Utils {
         }
         return (ArrayList<Integer>) board;
     }
+
+    public Integer getMenaceNextMove(){
+
+        return 0;
+    }
+
 }
