@@ -1,7 +1,6 @@
 import java.util.*;
 
-public class BaseState {
-
+public class BaseState extends Utils {
     public BaseState() {
         this.createWinWinStates();
         this.addAllRotations();
@@ -78,7 +77,6 @@ public class BaseState {
         return false;
     }
 
-
     public void generateMoves() {
         for (int i = 0; i < this.allMoves.length; i++) {
             System.out.println(this.allMoves[i]);
@@ -103,14 +101,14 @@ public class BaseState {
         Map<String, Object> result = new HashMap<String, Object>();
         result.put("data", temp);
 
-        //if no one played
-        if (xs == 0 && os == 0) {
-            result.put("val", false);
-            return result;
-        }
-
-        // xs = os // considering menace plays first
-        if ((xs + os) % 2 == 0 && xs == os) {
+        /**
+         * Two conditions:
+         * Considering Menace plays first then - {xs == os}, as always it's going to be even no.
+         *
+         * The winning condition can only be defined within first 6 steps.
+         * 7 step can be winning or else DRAW!!
+         */
+        if ((xs + os) < 7 && xs == os) {
             result.put("val", true);
             return result;
         }
@@ -133,12 +131,23 @@ public class BaseState {
         return data;
     }
 
+    /**
+     * MENACE
+     * Generate all the combinations based on 3 states 0,1,2
+     * and then validate
+     * State -
+     * 0 - Empty
+     * 1 - Menace
+     * 2 - Human
+     *
+     * @param track - a state of recursion
+     */
     public void compute(List<Integer> track) {
         if (track.size() == this.validLettersTTT) {
             Map<String, Object> data = this.verify((ArrayList<Integer>) track);
             if (data.get("val").equals(true)) {
                 String encoded = this.concatenateMe(track);
-                if (!isValidWinWinMove(encoded) && isValidUniqueRotation(encoded))
+                if (!this.isValidWinWinMove(encoded) && this.isValidUniqueRotation(encoded))
                     this.allCombinations.put(encoded, getCustomSizeValue((ArrayList<Integer>) data.get("data")));
             }
             return;
@@ -151,13 +160,6 @@ public class BaseState {
         }
     }
 
-    public String concatenateMe(List<Integer> arr) {
-        String str = new String();
-        for (int i = 0; i < arr.size(); i++) {
-            str += arr.get(i);
-        }
-        return str;
-    }
 
     public Map<String, ArrayList<Integer>> getAllCombinations() {
         Map<String, Object> temp = new HashMap<String, Object>();
@@ -187,55 +189,28 @@ public class BaseState {
         csvInstance.generateCSV(fileName, data);
     }
 
+    /**
+     * MENACE
+     * Get available from HashMap State
+     *
+     * @param state
+     * @return
+     */
+    //TODO - if not present then what ?
     public ArrayList<Integer> getAllAvailablePositions(String state) {
         if (!this.allCombinations.containsKey(state)) return new ArrayList<Integer>();
         return (ArrayList<Integer>) this.allCombinations.get(state);
     }
 
-    public Integer getRandomAvailableColor(ArrayList<Integer> options) {
-        int random = new Random().nextInt(options.size());
-        return options.get(random);
-    }
-
-    public String getSerialized2Dto1D(int[][] state) {
-        String str = "";
-        for (int i = 0; i < state.length; ++i) {
-            for (int j = 0; j < state[i].length; ++j) {
-                str += state[i][j];
-            }
-        }
-        return str;
-    }
-
-    public int[][] resetBoard() {
-        int[][] board = new int[3][3];
-        for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board[i].length; j++) {
-                board[i][j] = 0;
-            }
-        }
-        return board;
-    }
-
-    public ArrayList<Integer> getAvailableSpotsOnBoard(String board) {
-        List available = new ArrayList<Integer>();
-        for (int i = 0; i < board.length(); i++) {
-            if (board.charAt(i) == '0') {
-                available.add(i);
-            }
-        }
-        return (ArrayList<Integer>) available;
-    }
-
-    public ArrayList<Integer> convertStringToArray(String state) {
-        List<Integer> board = new ArrayList<Integer>();
-        for (int i = 0; i < state.length(); i++) {
-            if (state.charAt(i) == '0') board.add(Integer.valueOf(state.charAt(i)));
-        }
-        return (ArrayList<Integer>) board;
-    }
-
-
+    /**
+     * For MENACE
+     * Check if the value is present in the HashMap
+     * if yes, return it
+     * else, check for available spot -> choose a random value
+     *
+     * @param state - in the format of 0,1,2 Eg.010120102
+     * @return
+     */
     public ArrayList<Integer> getAvailableMove(String state) {
         ArrayList<Integer> available = this.allCombinations.get(state);
         if (available != null) {
@@ -247,11 +222,31 @@ public class BaseState {
         }
     }
 
+
+    /**
+     * Used by Human
+     * To get the available spots on board - Replace this!!!
+     *
+     * @param board - in the format of 0,1,2 Eg.010120102
+     * @return
+     */
+    //TODO - Check for human validations !
+    public ArrayList<Integer> getAvailableSpotsOnBoard(String board) {
+        List available = new ArrayList<Integer>();
+        for (int i = 0; i < board.length(); i++) {
+            if (board.charAt(i) == '0') {
+                available.add(i);
+            }
+        }
+        return (ArrayList<Integer>) available;
+    }
+
     private Map<String, Boolean> allWinWinStates = new HashMap<String, Boolean>();
     private Integer[] allMoves = new Integer[]{0, 1, 2};
     private Integer validLettersTTT = 9;
     private Map<String, ArrayList<Integer>> allCombinations = new HashMap<String, ArrayList<Integer>>();
     private int[][] allRotations = new int[8][9];
+
     private int initialSizeAvailabilityArray = 9; //alpha
     private int addWhenWin = 3; //beta
     private int removeWhenLose = 1; //gamma
