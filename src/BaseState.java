@@ -174,6 +174,21 @@ public class BaseState extends Utils {
         csvInstance.generateCSV(fileName, data);
     }
 
+
+    public List<Integer> checkMirrorImagesValidPositions(String encoded) {
+        for (int i = 0; i < this.allRotations.length; i++) {
+            String toCompare = "";
+            for (int j = 0; j < this.allRotations[i].length; j++) {
+                toCompare += encoded.charAt(this.allRotations[i][j]);
+            }
+            if (this.allCombinations.containsKey(toCompare)) {
+                return (List<Integer>) this.allCombinations.get(toCompare);
+            }
+        }
+        return null;
+    }
+
+
     /**
      * MENACE
      * Get available from HashMap State
@@ -183,7 +198,7 @@ public class BaseState extends Utils {
      */
     //TODO - if not present then what ?
     public List<Integer> getAllAvailablePositions(String state) {
-        if (!this.allCombinations.containsKey(state)) return new ArrayList<Integer>();
+        if (!this.allCombinations.containsKey(state)) return checkMirrorImagesValidPositions(state);
         return (List<Integer>) this.allCombinations.get(state);
     }
 
@@ -226,11 +241,11 @@ public class BaseState extends Utils {
         return (List<Integer>) available;
     }
 
-    public void rewardSystem( Map<String,Integer> path, int reward ){
-        for( String s : path.keySet() ){
-            List<Integer> beads = this.allCombinations.get(s);
+    public void rewardSystem(Map<String, Integer> path, int reward) {
+        for (String s : path.keySet()) {
+            List<Integer> beads = this.getAllAvailablePositions(s);
             int step = path.get(s);
-            beads.set(step, beads.get(step)+reward);
+            beads.set(step, beads.get(step) + reward);
         }
     }
 
