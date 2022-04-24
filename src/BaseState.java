@@ -118,7 +118,7 @@ public class BaseState extends Utils {
     }
 
 
-    public ArrayList<Integer> getCustomSizeValue(ArrayList<Integer> data) {
+    public List<Integer> getCustomSizeValue(List<Integer> data) {
         if (data.size() == (this.initialSizeAvailabilityArray)) return data;
         int i = 0;
         int j = 0;
@@ -148,7 +148,7 @@ public class BaseState extends Utils {
             if (data.get("val").equals(true)) {
                 String encoded = this.concatenateMe(track);
                 if (!this.isValidWinWinMove(encoded) && this.isValidUniqueRotation(encoded))
-                    this.allCombinations.put(encoded, getCustomSizeValue((ArrayList<Integer>) data.get("data")));
+                    this.allCombinations.put(encoded, getCustomSizeValue((List<Integer>) data.get("data")));
             }
             return;
         }
@@ -161,13 +161,13 @@ public class BaseState extends Utils {
     }
 
 
-    public Map<String, ArrayList<Integer>> getAllCombinations() {
+    public Map<String, List<Integer>> getAllCombinations() {
         Map<String, Object> temp = new HashMap<String, Object>();
 
         List<String> combinations = new ArrayList<String>();
         List<Object> available = new ArrayList<Object>();
 
-        for (Map.Entry<String, ArrayList<Integer>> entry : this.allCombinations.entrySet()) {
+        for (Map.Entry<String, List<Integer>> entry : this.allCombinations.entrySet()) {
             combinations.add(entry.getKey());
             available.add(entry.getValue());
         }
@@ -197,9 +197,9 @@ public class BaseState extends Utils {
      * @return
      */
     //TODO - if not present then what ?
-    public ArrayList<Integer> getAllAvailablePositions(String state) {
+    public List<Integer> getAllAvailablePositions(String state) {
         if (!this.allCombinations.containsKey(state)) return new ArrayList<Integer>();
-        return (ArrayList<Integer>) this.allCombinations.get(state);
+        return (List<Integer>) this.allCombinations.get(state);
     }
 
     /**
@@ -211,12 +211,12 @@ public class BaseState extends Utils {
      * @param state - in the format of 0,1,2 Eg.010120102
      * @return
      */
-    public ArrayList<Integer> getAvailableMove(String state) {
-        ArrayList<Integer> available = this.allCombinations.get(state);
+    public List<Integer> getAvailableMove(String state) {
+        List<Integer> available = this.allCombinations.get(state);
         if (available != null) {
             return available;
         } else {
-            ArrayList<Integer> temp = new ArrayList<>();
+            List<Integer> temp = new ArrayList<>();
             temp.add(getRandomAvailableColor(getAvailableSpotsOnBoard(state)));
             return temp;
         }
@@ -231,20 +231,20 @@ public class BaseState extends Utils {
      * @return
      */
     //TODO - Check for human validations !
-    public ArrayList<Integer> getAvailableSpotsOnBoard(String board) {
-        List available = new ArrayList<Integer>();
+    public List<Integer> getAvailableSpotsOnBoard(String board) {
+        List<Integer> available = new ArrayList<>();
         for (int i = 0; i < board.length(); i++) {
             if (board.charAt(i) == '0') {
                 available.add(i);
             }
         }
-        return (ArrayList<Integer>) available;
+        return (List<Integer>) available;
     }
 
-    private Map<String, Boolean> allWinWinStates = new HashMap<String, Boolean>();
+    private Map<String, Boolean> allWinWinStates = new HashMap<>();
     private Integer[] allMoves = new Integer[]{0, 1, 2};
     private Integer validLettersTTT = 9;
-    private Map<String, ArrayList<Integer>> allCombinations = new HashMap<String, ArrayList<Integer>>();
+    private Map<String, List<Integer>> allCombinations = new HashMap<>();
     private int[][] allRotations = new int[8][9];
 
     private int initialSizeAvailabilityArray = 9; //alpha

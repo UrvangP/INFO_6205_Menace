@@ -8,6 +8,10 @@ public class Human {
         board = data;
     }
 
+    public void play(){
+        humanStrat();
+    }
+
     public boolean humanStrat(){
 
         if( horizontalWinCase() ) return true;
@@ -25,9 +29,8 @@ public class Human {
 
     public boolean horizontalWinCase(){
 
-        int[] counts = new int[3];
-
         for( int i=0; i<board.length; ++i){
+            int[] counts = new int[3];
             int zero = -1;
             for( int j=0; j<board[0].length; ++j){
                 if(board[i][j]==0) {
@@ -46,9 +49,9 @@ public class Human {
     }
 
     public boolean verticalWinCase() {
-        int[] counts = new int[3];
 
         for (int i = 0; i < board.length; ++i) {
+            int[] counts = new int[3];
             int zero = -1;
             for (int j = 0; j < board[0].length; ++j) {
                 if (board[j][i] == 0) {
@@ -87,6 +90,8 @@ public class Human {
 
         int zeroRow = -1;
         int zeroCol = -1;
+        counts = new int[3];
+
         for (int i=0, j=board[0].length-1; i < board.length && j>=0; ++i,--j) {
 
             if (board[i][j] == 0) {
