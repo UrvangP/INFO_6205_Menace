@@ -78,4 +78,10 @@ public class Utils {
         }
         return (ArrayList<Integer>) board;
     }
+
+    public Integer getMenaceNextMove(){
+
+        return 0;
+    }
+
 }

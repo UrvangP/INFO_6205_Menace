@@ -46,7 +46,7 @@ public class BaseState extends Utils {
     }
 
     public Boolean isValidWinWinMove(String state) {
-        List<String> temp = new ArrayList<String>();
+        List<String> temp = new ArrayList<>();
 
         for (int i = 0; i < state.length(); i++) {
             String current = String.valueOf(state.charAt(i));
@@ -83,11 +83,11 @@ public class BaseState extends Utils {
         }
     }
 
-    public Map<String, Object> verify(ArrayList<Integer> state) {
+    public Map<String, Object> verify(List<Integer> state) {
         int xs = 0;
         int os = 0;
         int i = 0;
-        List<Integer> temp = new ArrayList<Integer>();
+        List<Integer> temp = new ArrayList<>();
 
         while (i < state.size()) {
             Integer curr = state.get(i);
@@ -98,7 +98,7 @@ public class BaseState extends Utils {
         }
 
         // result is an object with valid and data(available spots)
-        Map<String, Object> result = new HashMap<String, Object>();
+        Map<String, Object> result = new HashMap<>();
         result.put("data", temp);
 
         /**
@@ -144,7 +144,7 @@ public class BaseState extends Utils {
      */
     public void compute(List<Integer> track) {
         if (track.size() == this.validLettersTTT) {
-            Map<String, Object> data = this.verify((ArrayList<Integer>) track);
+            Map<String, Object> data = this.verify(track);
             if (data.get("val").equals(true)) {
                 String encoded = this.concatenateMe(track);
                 if (!this.isValidWinWinMove(encoded) && this.isValidUniqueRotation(encoded))
@@ -162,10 +162,10 @@ public class BaseState extends Utils {
 
 
     public Map<String, List<Integer>> getAllCombinations() {
-        Map<String, Object> temp = new HashMap<String, Object>();
+        Map<String, Object> temp = new HashMap<>();
 
-        List<String> combinations = new ArrayList<String>();
-        List<Object> available = new ArrayList<Object>();
+        List<String> combinations = new ArrayList<>();
+        List<Object> available = new ArrayList<>();
 
         for (Map.Entry<String, List<Integer>> entry : this.allCombinations.entrySet()) {
             combinations.add(entry.getKey());
