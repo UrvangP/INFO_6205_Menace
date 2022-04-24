@@ -100,7 +100,7 @@ public class BaseState extends Utils {
 
 
     public List<Integer> getCustomSizeValue(List<Integer> data) {
-        if (data.size() == (this.initialSizeAvailabilityArray)) return data;
+        //if (data.size() == (this.initialSizeAvailabilityArray)) return data;
 
         List<Integer> value = new ArrayList<Integer>();
 
@@ -224,6 +224,14 @@ public class BaseState extends Utils {
             }
         }
         return (List<Integer>) available;
+    }
+
+    public void rewardSystem( Map<String,Integer> path, int reward ){
+        for( String s : path.keySet() ){
+            List<Integer> beads = this.allCombinations.get(s);
+            int step = path.get(s);
+            beads.set(step, beads.get(step)+reward);
+        }
     }
 
     private int[][] allWinWinStates = new int[8][3];

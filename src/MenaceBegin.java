@@ -26,6 +26,7 @@ public class MenaceBegin {
              * EMPTY - 0
              */
             int[][] board = baseInstance.resetBoard();
+            Map<String,Integer> moves = new HashMap<>();
             Human human = new Human(board);
             int chance = 0;
 
@@ -35,7 +36,17 @@ public class MenaceBegin {
 
                 if(!turn){
                     List<Integer> positionsToPlay = baseInstance.getAvailableMove(serial);
-                    int rand = baseInstance.getRandomAvailableColor(positionsToPlay);
+
+                    List<Integer> playableSpots = new ArrayList<>();
+                    for( int pos=0; pos<positionsToPlay.size(); ++pos){
+                        int val = positionsToPlay.get(pos);
+                        if(val>0){
+                            playableSpots.add(pos);
+                        }
+                    }
+
+                    int rand = baseInstance.getRandomAvailableColor(playableSpots);
+                    moves.put(serial, rand);
                     board[(int) Math.floor(rand / 3)][rand % 3] = !turn ? 1 : 2;
                 }
                 else{
@@ -45,6 +56,15 @@ public class MenaceBegin {
 
                 toCheckWin = baseInstance.getSerialized2Dto1D((board));
                 if (baseInstance.isValidWinWinMove(toCheckWin)) {
+                    if(turn){
+                        //subtract beads
+                        baseInstance.rewardSystem( moves, -1);
+                    }
+                    else{
+                        //add beads
+                        baseInstance.rewardSystem( moves, 3);
+                    }
+
                     System.out.println(turn ? "Human:" : "Menace:" + "Win!!" + toCheckWin);
                     break;
                 }
@@ -54,6 +74,7 @@ public class MenaceBegin {
 
             if (chance == 9) {
                 //Draw
+                baseInstance.rewardSystem( moves, 1);
                 System.out.println("Draw!!" + toCheckWin);
             }
         }
