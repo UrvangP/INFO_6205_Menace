@@ -1,9 +1,14 @@
 import java.util.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class MenaceBegin {
 
     public static void main(String[] args) {
         BaseState baseInstance = new BaseState();
+
+        Logger logger = LoggerFactory.getLogger(MenaceBegin.class);
+
         System.out.println("total combinations: " + baseInstance.getAllCombinations().size());
         for (int i = 0; i < 10; ++i) {
             Boolean turn = false; //MENACE
