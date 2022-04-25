@@ -1,4 +1,5 @@
 import java.util.*;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,7 +11,9 @@ public class MenaceBegin {
         Logger logger = LoggerFactory.getLogger(MenaceBegin.class);
 
         System.out.println("total combinations: " + baseInstance.getAllCombinations().size());
-        for (int i = 0; i < 10; ++i) {
+        int menace = 0;
+        int humanC = 0;
+        for (int i = 0; i < 10000; ++i) {
             Boolean turn = false; //MENACE
             /**
              * MENACE - 1
@@ -38,19 +41,14 @@ public class MenaceBegin {
                     }
                     // positionsToPlay - return an array with all valid positions allowed to play
                     List<Integer> positionsToPlay = baseInstance.getAllAvailablePositions(serial);
-                    List<Integer> playableSpots = new ArrayList<>();
-                    for (int pos = 0; pos < positionsToPlay.size(); ++pos) {
-                        int val = positionsToPlay.get(pos);
-                        if (val > 0) playableSpots.add(pos);
-                    }
                     // randomly pick from the available spots
-                    int rand = baseInstance.getRandomAvailableColor(playableSpots);
+                    int rand = baseInstance.pickRandomIndex(positionsToPlay, serial);
+                    System.out.println("rand" + serial + "|" + rand);
                     // moves - to keep a track on the game played
                     moves.put(serial, rand);
                     // mark the menace move on the board
                     board[(int) Math.floor(rand / 3)][rand % 3] = 1;
                 } else {
-                    // Human turn
                     human.play();
                 }
                 toCheckWin = baseInstance.getSerialized2Dto1D((board));
@@ -62,7 +60,11 @@ public class MenaceBegin {
                         //add beads
                         baseInstance.rewardSystem(moves, baseInstance.betaRewardWhenWin());
                     }
+                    logger.info((turn ? "Human:" : "Menace:") + "Win!!" + toCheckWin);
+
                     System.out.println((turn ? "Human:" : "Menace:") + "Win!!" + toCheckWin);
+                    if (turn) humanC++;
+                    else menace++;
                     break;
                 }
                 turn = !turn;
@@ -73,8 +75,13 @@ public class MenaceBegin {
                 // Draw
                 baseInstance.rewardSystem(moves, baseInstance.deltaRewardWhenDraw());
                 System.out.println("Draw!!" + toCheckWin);
+                logger.info("Draw: " + String.valueOf(board));
+
             }
         }
+
+
+        System.out.println(menace + "v/s" + humanC);
         baseInstance.getAllCombinations();
     }
 }

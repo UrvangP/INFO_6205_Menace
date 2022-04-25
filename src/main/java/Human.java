@@ -4,34 +4,34 @@ public class Human {
 
     int[][] board;
 
-    public Human( int[][] data ){
+    public Human(int[][] data) {
         board = data;
     }
 
-    public void play(){
+    public void play() {
         humanStrat();
     }
 
-    public boolean humanStrat(){
+    public boolean humanStrat() {
 
-        if( horizontalWinCase() ) return true;
-        if( verticalWinCase() ) return true;
-        if( diagonalWinCase() ) return true;
-        if( blockWins() ) return true;
-        if( fork() ) return true;
-        if( forkBlock() ) return true;
-        if( isCenterEmpty() ) return true;
-        if( isCornerEmpty() ) return  true;
-        if( isSideEmpty() ) return true;
+        if (horizontalWinCase()) return true;
+        if (verticalWinCase()) return true;
+        if (diagonalWinCase()) return true;
+        if (blockWins()) return true;
+        if (fork()) return true;
+        if (forkBlock()) return true;
+        if (isCenterEmpty()) return true;
+        if (isCornerEmpty()) return true;
+        if (isSideEmpty()) return true;
 
         return false;
     }
 
-    public boolean horizontalWinCase(){
+    public boolean horizontalWinCase() {
 
         int[] pos = horizontalWin(2);
 
-        if( pos[0] != -1 && pos[1] != -1 ){
+        if (pos[0] != -1 && pos[1] != -1) {
             board[pos[0]][pos[1]] = 2;
             return true;
         }
@@ -43,7 +43,7 @@ public class Human {
 
         int[] pos = verticalWin(2);
 
-        if( pos[0] != -1 && pos[1] != -1 ){
+        if (pos[0] != -1 && pos[1] != -1) {
             board[pos[0]][pos[1]] = 2;
             return true;
         }
@@ -51,11 +51,11 @@ public class Human {
         return false;
     }
 
-    public boolean diagonalWinCase(){
+    public boolean diagonalWinCase() {
 
         int[] pos = diagonalWin(2);
 
-        if( pos[0] != -1 && pos[1] != -1 ){
+        if (pos[0] != -1 && pos[1] != -1) {
             board[pos[0]][pos[1]] = 2;
             return true;
         }
@@ -63,26 +63,26 @@ public class Human {
         return false;
     }
 
-    public boolean blockWins(){
+    public boolean blockWins() {
 
         int[] pos = new int[2];
         pos = horizontalWin(1);
 
-        if( pos[0] != -1 && pos[1] != -1 ){
+        if (pos[0] != -1 && pos[1] != -1) {
             board[pos[0]][pos[1]] = 2;
             return true;
         }
 
         pos = verticalWin(1);
 
-        if( pos[0] != -1 && pos[1] != -1 ){
+        if (pos[0] != -1 && pos[1] != -1) {
             board[pos[0]][pos[1]] = 2;
             return true;
         }
 
         pos = diagonalWin(1);
 
-        if( pos[0] != -1 && pos[1] != -1 ){
+        if (pos[0] != -1 && pos[1] != -1) {
             board[pos[0]][pos[1]] = 2;
             return true;
         }
@@ -90,75 +90,72 @@ public class Human {
         return false;
     }
 
-    public boolean fork(){
+    public boolean fork() {
 
-        if( board[0][0]==2 && board[2][2]==2 && board[1][1]==1){
-            if( board[0][2]==1 && board[2][0]==0){
-                board[2][0]=2;
+        if (board[0][0] == 2 && board[2][2] == 2 && board[1][1] == 1) {
+            if (board[0][2] == 1 && board[2][0] == 0) {
+                board[2][0] = 2;
                 return true;
             }
-            if( board[0][2]==0 && board[2][0]==1){
-                board[0][2]=2;
+            if (board[0][2] == 0 && board[2][0] == 1) {
+                board[0][2] = 2;
                 return true;
             }
-        }
-
-        else if( board[0][2]==2 && board[2][0]==2 && board[1][1]==1){
-            if( board[0][0]==1 && board[2][2]==0){
-                board[2][2]=2;
+        } else if (board[0][2] == 2 && board[2][0] == 2 && board[1][1] == 1) {
+            if (board[0][0] == 1 && board[2][2] == 0) {
+                board[2][2] = 2;
                 return true;
             }
-            if( board[0][0]==0 && board[2][2]==1){
-                board[0][0]=2;
+            if (board[0][0] == 0 && board[2][2] == 1) {
+                board[0][0] = 2;
                 return true;
             }
-        }
-
-        return false;
-    }
-
-    public boolean forkBlock(){
-
-        if( board[0][0]==1 && board[2][2]==1 && board[1][1]==2){
-            if(isCornerEmpty()) return true;
-        }
-
-        if( board[0][2]==1 && board[2][0]==1 && board[1][1]==2){
-            if(isCornerEmpty()) return true;
         }
 
         return false;
     }
 
-    public boolean isCenterEmpty(){
+    public boolean forkBlock() {
 
-        if( board[1][1]==0){
-            board[1][1]=2;
+        if (board[0][0] == 1 && board[2][2] == 1 && board[1][1] == 2) {
+            if (isCornerEmpty()) return true;
+        }
+
+        if (board[0][2] == 1 && board[2][0] == 1 && board[1][1] == 2) {
+            if (isCornerEmpty()) return true;
+        }
+
+        return false;
+    }
+
+    public boolean isCenterEmpty() {
+
+        if (board[1][1] == 0) {
+            board[1][1] = 2;
             return true;
         }
 
         return false;
     }
 
-    public boolean isCornerEmpty(){
+    public boolean isCornerEmpty() {
 
         List<int[]> empty = new ArrayList<>();
 
-        for( int i=0; i<3; ++i ){
-            for( int j=0; j<3; ++j ){
-                if(Math.abs(i-j)==2 && board[i][j]==0){
-                    empty.add(new int[]{i,j});
+        for (int i = 0; i < 3; ++i) {
+            for (int j = 0; j < 3; ++j) {
+                if (Math.abs(i - j) == 2 && board[i][j] == 0) {
+                    empty.add(new int[]{i, j});
                 }
-                if(Math.abs(i-j)==0 && i!=1 && board[i][j]==0){
-                    empty.add(new int[]{i,j});
+                if (Math.abs(i - j) == 0 && i != 1 && board[i][j] == 0) {
+                    empty.add(new int[]{i, j});
                 }
             }
         }
 
-        if(empty.isEmpty()){
+        if (empty.isEmpty()) {
             return false;
-        }
-        else{
+        } else {
             Random rand = new Random();
             int val = rand.nextInt(empty.size());
             int[] index = empty.get(val);
@@ -167,22 +164,21 @@ public class Human {
         }
     }
 
-    public boolean isSideEmpty(){
+    public boolean isSideEmpty() {
 
         List<int[]> empty = new ArrayList<>();
 
-        for( int i=0; i<3; ++i ){
-            for( int j=0; j<3; ++j ){
-                if(Math.abs(i-j)==1 && board[i][j]==0){
-                    empty.add(new int[]{i,j});
+        for (int i = 0; i < 3; ++i) {
+            for (int j = 0; j < 3; ++j) {
+                if (Math.abs(i - j) == 1 && board[i][j] == 0) {
+                    empty.add(new int[]{i, j});
                 }
             }
         }
 
-        if(empty.isEmpty()){
+        if (empty.isEmpty()) {
             return false;
-        }
-        else{
+        } else {
             Random rand = new Random();
             int val = rand.nextInt(empty.size());
             int[] index = empty.get(val);
@@ -191,59 +187,59 @@ public class Human {
         }
     }
 
-    public int[] horizontalWin( int player ){
-        for( int i=0; i<board.length; ++i){
+    public int[] horizontalWin(int player) {
+        for (int i = 0; i < board.length; ++i) {
             int[] counts = new int[2];
             int zeroRow = -1;
             int zeroCol = -1;
-            for( int j=0; j<board[0].length; ++j){
-                if(board[i][j]==0) {
+            for (int j = 0; j < board[0].length; ++j) {
+                if (board[i][j] == 0) {
                     counts[0]++;
                     zeroRow = i;
                     zeroCol = j;
                 }
-                if(board[i][j]==player) counts[1]++;
+                if (board[i][j] == player) counts[1]++;
             }
-            if(counts[0]==1 && counts[1]==2){
+            if (counts[0] == 1 && counts[1] == 2) {
                 return new int[]{zeroRow, zeroCol};
             }
         }
-        return new int[]{-1,-1};
+        return new int[]{-1, -1};
     }
 
-    public int[] verticalWin( int player ){
-        for( int i=0; i<board.length; ++i){
+    public int[] verticalWin(int player) {
+        for (int i = 0; i < board.length; ++i) {
             int[] counts = new int[2];
             int zeroRow = -1;
             int zeroCol = -1;
-            for( int j=0; j<board[0].length; ++j){
-                if(board[j][i]==0) {
+            for (int j = 0; j < board[0].length; ++j) {
+                if (board[j][i] == 0) {
                     counts[0]++;
-                    zeroRow = i;
-                    zeroCol = j;
+                    zeroRow = j;
+                    zeroCol = i;
                 }
-                if(board[j][i]==player) counts[1]++;
+                if (board[j][i] == player) counts[1]++;
             }
-            if(counts[0]==1 && counts[1]==2){
+            if (counts[0] == 1 && counts[1] == 2) {
                 return new int[]{zeroRow, zeroCol};
             }
         }
-        return new int[]{-1,-1};
+        return new int[]{-1, -1};
     }
 
-    public int[] diagonalWin( int player ){
+    public int[] diagonalWin(int player) {
         int[] counts = new int[2];
 
         int zero = -1;
-        for (int i=0; i < board.length; ++i) {
-            if(board[i][i] == 0) {
+        for (int i = 0; i < board.length; ++i) {
+            if (board[i][i] == 0) {
                 counts[0]++;
-                zero=i;
+                zero = i;
             }
             if (board[i][i] == player) counts[1]++;
 
             if (counts[0] == 1 && counts[1] == 2) {
-                return new int[]{zero,zero};
+                return new int[]{zero, zero};
             }
 
         }
@@ -252,7 +248,7 @@ public class Human {
         int zeroCol = -1;
         counts = new int[3];
 
-        for (int i=0, j=board[0].length-1; i < board.length && j>=0; ++i,--j) {
+        for (int i = 0, j = board[0].length - 1; i < board.length && j >= 0; ++i, --j) {
 
             if (board[i][j] == 0) {
                 counts[0]++;
@@ -263,10 +259,10 @@ public class Human {
 
             if (counts[0] == 1 && counts[1] == 2) {
                 //board[zeroRow][zeroCol] = 2;
-                return new int[]{zeroRow,zeroCol};
+                return new int[]{zeroRow, zeroCol};
             }
         }
 
-        return new int[]{-1,-1};
+        return new int[]{-1, -1};
     }
 }

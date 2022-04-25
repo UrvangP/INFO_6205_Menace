@@ -1,5 +1,6 @@
 import java.io.FileNotFoundException;
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class BaseState extends Utils {
     public BaseState() {
@@ -58,12 +59,6 @@ public class BaseState extends Utils {
             }
         }
         return false;
-    }
-
-    public void generateMoves() {
-        for (int i = 0; i < this.allMoves.length; i++) {
-            System.out.println(this.allMoves[i]);
-        }
     }
 
     public Map<String, Object> verify(List<Integer> state) {
@@ -167,10 +162,6 @@ public class BaseState extends Utils {
         return this.allCombinations;
     }
 
-    public int[][] getWinWinStates() {
-        return this.allWinWinStates;
-    }
-
     public void printCSV(String fileName, Map<String, Object> data) {
         CSV csvInstance = new CSV();
         csvInstance.generateCSV(fileName, data);
@@ -260,15 +251,7 @@ public class BaseState extends Utils {
         }
     }
 
-    /**
-     * MENACE
-     * getRandomPositionForDraw()
-     * This is for Draw state only - where moves >= 7
-     * To pick the random spot
-     *
-     * @param encoded
-     * @return
-     */
+
     public List<Integer> getRandomPositionForDraw(String encoded) {
         List<Integer> availablePositions = new ArrayList<>();
         for (int i = 0; i < encoded.length(); i++) {
@@ -276,6 +259,37 @@ public class BaseState extends Utils {
             else availablePositions.add(0);
         }
         return availablePositions;
+    }
+
+
+    public int pickRandomIndex(List<Integer> options, String encoded) {
+        List<Integer> temp = new ArrayList<>();
+        for (int i = 0; i < encoded.length(); i++) {
+            if (encoded.charAt(i) == '0') {
+                temp.add(i);
+            }
+        }
+        List<Integer> temp1 = new ArrayList<>();
+        for (int i = 0; i < temp.size(); i++) {
+            temp1.add(options.get(temp.get(i)));
+        }
+        int[] w = new int[temp1.size()];
+        for (int i = 0; i < temp1.size(); i++) {
+            w[i] = temp1.get(i);
+        }
+        int[] prefixSums = new int[w.length];
+        int prefixSum = 0;
+        for (int i = 0; i < w.length; ++i) {
+            prefixSum += w[i];
+            prefixSums[i] = prefixSum;
+        }
+        int totalSum = prefixSum;
+        double target = totalSum * Math.random();
+        int i = 0;
+        for (; i < prefixSums.length; ++i) {
+            if (target < prefixSums[i]) return temp.get(i);
+        }
+        return temp.get(i - 1);
     }
 
     public void readAndSaveCSV() {
@@ -305,8 +319,8 @@ public class BaseState extends Utils {
     private int[][] allRotations = new int[8][9];
 
 
-    private int initialSizeAvailabilityArray = 9; //alpha
-    private int addWhenWin = 3; //beta
+    private int initialSizeAvailabilityArray = 100; //alpha
+    private int addWhenWin = 8; //beta
     private int removeWhenLose = 1; //gamma
-    private int addWhenDraw = 1; //delta
+    private int addWhenDraw = 5; //delta
 }
