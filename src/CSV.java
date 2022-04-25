@@ -1,6 +1,8 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
 import java.util.*;
 
 public class CSV {
@@ -21,7 +23,7 @@ public class CSV {
 
     public void generateColumns(StringBuilder sb, Map<String, Object> data) {
         for (String key : data.keySet()) {
-            sb.append(key);
+            sb.append(key.toUpperCase());
             sb.append(',');
         }
         sb.append('\n');
@@ -57,5 +59,32 @@ public class CSV {
             }
         }
         return str;
+    }
+
+    public Map<String, List<Integer>> readCSV() {
+        Map<String, List<Integer>> allCombinations = new HashMap<>();
+        try {
+            Path path = FileSystems.getDefault().getPath("").toAbsolutePath();
+            Scanner sc = null;
+            sc = new Scanner(new File(path + "/combinations.csv"));
+            sc.useDelimiter("\n");
+            while (sc.hasNext()) {
+                String temp = sc.next();
+                String[] temp1 = temp.split(",");
+                String key = temp1[1];
+                String[] value = temp1[0].split(" | ");
+                if (value.length == 1) continue;
+                List<Integer> temp2 = new ArrayList<>();
+                for (int i = 0; i < value.length; i++) {
+                    if (i % 2 == 0) temp2.add(Integer.valueOf(value[i]));
+                }
+                allCombinations.put(key, temp2);
+            }
+            sc.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found!!");
+            System.out.println(e.getMessage());
+        }
+        return allCombinations;
     }
 }

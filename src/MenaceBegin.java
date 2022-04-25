@@ -5,7 +5,7 @@ public class MenaceBegin {
     public static void main(String[] args) {
         BaseState baseInstance = new BaseState();
         System.out.println("total combinations: " + baseInstance.getAllCombinations().size());
-        for (int i = 0; i < 10000; ++i) {
+        for (int i = 0; i < 10; ++i) {
             Boolean turn = false; //MENACE
             /**
              * MENACE - 1
@@ -52,10 +52,10 @@ public class MenaceBegin {
                 if (baseInstance.isValidWinWinMove(toCheckWin)) {
                     if (turn) {
                         //subtract beads
-                        baseInstance.rewardSystem(moves, -1);
+                        baseInstance.rewardSystem(moves, -1 * baseInstance.gammaRewardWhenLose());
                     } else {
                         //add beads
-                        baseInstance.rewardSystem(moves, 3);
+                        baseInstance.rewardSystem(moves, baseInstance.betaRewardWhenWin());
                     }
                     System.out.println((turn ? "Human:" : "Menace:") + "Win!!" + toCheckWin);
                     break;
@@ -65,11 +65,12 @@ public class MenaceBegin {
             }
 
             if (chance == 9) {
-                //Draw
-                baseInstance.rewardSystem(moves, 1);
+                // Draw
+                baseInstance.rewardSystem(moves, baseInstance.deltaRewardWhenDraw());
                 System.out.println("Draw!!" + toCheckWin);
             }
         }
+        baseInstance.getAllCombinations();
     }
 }
 

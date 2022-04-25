@@ -1,10 +1,11 @@
+import java.io.FileNotFoundException;
 import java.util.*;
 
 public class BaseState extends Utils {
     public BaseState() {
         this.createWinWinStates();
         this.addAllRotations();
-        this.compute(new ArrayList<Integer>());
+        this.readAndSaveCSV();
     }
 
     private void createWinWinStates() {
@@ -277,11 +278,32 @@ public class BaseState extends Utils {
         return availablePositions;
     }
 
+    public void readAndSaveCSV() {
+        CSV csvInstance = new CSV();
+        this.allCombinations = csvInstance.readCSV();
+        if (this.allCombinations.size() == 0) {
+            this.compute(new ArrayList<Integer>());
+        }
+    }
+
+    public int betaRewardWhenWin() {
+        return this.addWhenWin;
+    }
+
+    public int gammaRewardWhenLose() {
+        return this.removeWhenLose;
+    }
+
+    public int deltaRewardWhenDraw() {
+        return this.addWhenDraw;
+    }
+
     private int[][] allWinWinStates = new int[8][3];
     private Integer[] allMoves = new Integer[]{0, 1, 2};
     private Integer validLettersTTT = 9;
     private Map<String, List<Integer>> allCombinations = new HashMap<>();
     private int[][] allRotations = new int[8][9];
+
 
     private int initialSizeAvailabilityArray = 9; //alpha
     private int addWhenWin = 3; //beta
