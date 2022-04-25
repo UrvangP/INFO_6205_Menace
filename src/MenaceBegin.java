@@ -4,21 +4,8 @@ public class MenaceBegin {
 
     public static void main(String[] args) {
         BaseState baseInstance = new BaseState();
-        Boolean isValid = baseInstance.isValidWinWinMove("000002100");
-        System.out.println("120102100 isValid:- " + isValid);
-//        baseInstance.generateMoves();
-        baseInstance.compute(new ArrayList<Integer>());
-        List<Integer> availablePositions = baseInstance.getAllAvailablePositions("000002100");
-        for (int i = 0; i < availablePositions.size(); i++) {
-            System.out.println(availablePositions.get(i));
-        }
-        int randomPosition = baseInstance.getRandomAvailableColor(availablePositions);
-        System.out.println("Random No. " + randomPosition);
-
         System.out.println("total combinations: " + baseInstance.getAllCombinations().size());
-
-
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 10000; ++i) {
             Boolean turn = false; //MENACE
             /**
              * MENACE - 1
@@ -33,20 +20,32 @@ public class MenaceBegin {
             String toCheckWin = "";
             while (chance < 9) {
                 String serial = baseInstance.getSerialized2Dto1D(board);
-
                 if (!turn) {
-                    List<Integer> positionsToPlay = baseInstance.getAvailableMove(serial);
+                    // MENACE turn
+
+                    //If there is no serial/state in HashMap - find the appropriate state and replace it!
+                    if (!baseInstance.getAllCombinations().containsKey(serial) && chance < 7) {
+                        // validCombination - is the appropriate state
+                        String validCombination = baseInstance.getValidCombination(serial);
+                        serial = validCombination;
+                        // replace the board based on appropriate state
+                        baseInstance.getNewConfigBoard(board, serial);
+                    }
+                    // positionsToPlay - return an array with all valid positions allowed to play
+                    List<Integer> positionsToPlay = baseInstance.getAllAvailablePositions(serial);
                     List<Integer> playableSpots = new ArrayList<>();
                     for (int pos = 0; pos < positionsToPlay.size(); ++pos) {
                         int val = positionsToPlay.get(pos);
-                        if (val > 0) {
-                            playableSpots.add(pos);
-                        }
+                        if (val > 0) playableSpots.add(pos);
                     }
+                    // randomly pick from the available spots
                     int rand = baseInstance.getRandomAvailableColor(playableSpots);
+                    // moves - to keep a track on the game played
                     moves.put(serial, rand);
-                    board[(int) Math.floor(rand / 3)][rand % 3] = !turn ? 1 : 2;
+                    // mark the menace move on the board
+                    board[(int) Math.floor(rand / 3)][rand % 3] = 1;
                 } else {
+                    // Human turn
                     human.play();
                 }
                 toCheckWin = baseInstance.getSerialized2Dto1D((board));
@@ -58,8 +57,7 @@ public class MenaceBegin {
                         //add beads
                         baseInstance.rewardSystem(moves, 3);
                     }
-
-                    System.out.println(turn ? "Human:" : "Menace:" + "Win!!" + toCheckWin);
+                    System.out.println((turn ? "Human:" : "Menace:") + "Win!!" + toCheckWin);
                     break;
                 }
                 turn = !turn;

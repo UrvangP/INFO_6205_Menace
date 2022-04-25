@@ -4,6 +4,7 @@ public class BaseState extends Utils {
     public BaseState() {
         this.createWinWinStates();
         this.addAllRotations();
+        this.compute(new ArrayList<Integer>());
     }
 
     private void createWinWinStates() {
@@ -185,7 +186,7 @@ public class BaseState extends Utils {
                 return (List<Integer>) this.allCombinations.get(toCompare);
             }
         }
-        return null;
+        return getRandomPositionForDraw(encoded);
     }
 
 
@@ -202,51 +203,78 @@ public class BaseState extends Utils {
         return (List<Integer>) this.allCombinations.get(state);
     }
 
-    /**
-     * For MENACE
-     * Check if the value is present in the HashMap
-     * if yes, return it
-     * else, check for available spot -> choose a random value
-     *
-     * @param state - in the format of 0,1,2 Eg.010120102
-     * @return
-     */
-    public List<Integer> getAvailableMove(String state) {
-        List<Integer> available = this.allCombinations.get(state);
-        if (available != null) {
-            return available;
-        } else {
-            List<Integer> temp = new ArrayList<>();
-            temp.add(getRandomAvailableColor(getAvailableSpotsOnBoard(state)));
-            return temp;
-        }
-    }
-
 
     /**
-     * Used by Human
-     * To get the available spots on board - Replace this!!!
+     * MENACE
+     * getValidCombination()
+     * Get a valid combination if the played state is not found
+     * Check for mirror availability
      *
-     * @param board - in the format of 0,1,2 Eg.010120102
+     * @param encoded
      * @return
      */
-    //TODO - Check for human validations !
-    public List<Integer> getAvailableSpotsOnBoard(String board) {
-        List<Integer> available = new ArrayList<>();
-        for (int i = 0; i < board.length(); i++) {
-            if (board.charAt(i) == '0') {
-                available.add(i);
+    public String getValidCombination(String encoded) {
+        for (int i = 0; i < this.allRotations.length; i++) {
+            String toCompare = "";
+            for (int j = 0; j < this.allRotations[i].length; j++) {
+                toCompare += encoded.charAt(this.allRotations[i][j]);
+            }
+
+            if (this.allCombinations.containsKey(toCompare)) {
+                return toCompare;
             }
         }
-        return (List<Integer>) available;
+        return null;
     }
 
+    /**
+     * MENACE
+     * getNewConfigBoard()
+     * Get new config of the board - if the state is not found in the store/HashMap
+     *
+     * @param board   - old board
+     * @param encoded - new state to replace old board
+     */
+    public void getNewConfigBoard(int[][] board, String encoded) {
+        for (int i = 0; i < encoded.length(); i++) {
+            board[(int) Math.floor(i / 3)][i % 3] = Character.getNumericValue(encoded.charAt(i));
+        }
+    }
+
+    /**
+     * MENACE
+     * rewardSystem()
+     * To train - maintain reward system
+     * if win - add beads
+     * if lose - subtract
+     *
+     * @param path
+     * @param reward
+     */
     public void rewardSystem(Map<String, Integer> path, int reward) {
         for (String s : path.keySet()) {
             List<Integer> beads = this.getAllAvailablePositions(s);
             int step = path.get(s);
             beads.set(step, beads.get(step) + reward);
         }
+    }
+
+    /**
+     * MENACE
+     * getRandomPositionForDraw()
+     * This is for Draw state only - where moves >= 7
+     * To pick the random spot
+     *
+     * @param encoded
+     * @return
+     */
+    public List<Integer> getRandomPositionForDraw(String encoded) {
+        List<Integer> availablePositions = new ArrayList<>();
+        for (int i = 0; i < encoded.length(); i++) {
+            if (encoded.charAt(i) == '0') availablePositions.add(this.initialSizeAvailabilityArray);
+            else availablePositions.add(0);
+        }
+        return availablePositions;
     }
 
     private int[][] allWinWinStates = new int[8][3];
