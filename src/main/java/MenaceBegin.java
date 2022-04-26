@@ -3,6 +3,9 @@ import java.util.*;
 public class MenaceBegin {
 
     public static void main(String[] args) {
+        System.out.println("args" + args);
+        Boolean isUser = args.length > 0 ? Boolean.parseBoolean(args[0]) : false;
+        Scanner humanTurnInput = new Scanner(System.in);
         // Initializes the Base Class
         BaseState baseInstance = new BaseState();
         // Initializes the MenaceLogger
@@ -17,7 +20,7 @@ public class MenaceBegin {
         Map<String, Object> results = new HashMap<>();
         Map<String, Object> beadGraph = new HashMap<>();
 
-        for (int i = 0; i < totalGames; ++i) {
+        for (int i = 0; i < (isUser ? 1 : totalGames); ++i) {
             Boolean turn = false; //MENACE
             /**
              * MENACE - 1
@@ -25,6 +28,8 @@ public class MenaceBegin {
              * EMPTY - 0
              */
             int[][] board = baseInstance.resetBoard();
+
+
             Map<String, Integer> moves = new HashMap<>();
             Human human = new Human(board);
             int chance = 0;
@@ -49,15 +54,15 @@ public class MenaceBegin {
 
                     int countPositions = 0;
                     int countBeads = 0;
-                    for( int val : positionsToPlay ){
-                        if( val > 0) {
+                    for (int val : positionsToPlay) {
+                        if (val > 0) {
                             countPositions++;
                             countBeads += val;
                         }
 
                     }
 
-                    if(countPositions==9){
+                    if (countPositions == 9) {
                         //count
                         List<Integer> beads = new ArrayList<>();
                         beads.add(countBeads);
@@ -74,7 +79,24 @@ public class MenaceBegin {
                     board[(int) Math.floor(rand / 3)][rand % 3] = 1;
                 } else {
                     logger.logMe("Board state " + baseInstance.getSerialized2Dto1D(board));
-                    human.play();
+
+                    if (isUser) {
+                        for (int k = 0; k < 3; k++) {
+                            String str = "";
+                            for (int m = 0; m < 3; m++) {
+                                str += Integer.toString(board[k][m]);
+                                if (m != 2) {
+                                    str += " | ";
+                                }
+                            }
+                            System.out.println(str);
+                        }
+                        System.out.println("Enter in format x,y: ");
+                        String step = humanTurnInput.nextLine();
+                        String[] inputs = step.split(",");
+                        board[Integer.parseInt(inputs[0])][Integer.parseInt(inputs[1])] = 2;
+                        logger.logMe("User played " + inputs[0] + ", " + inputs[1]);
+                    } else human.play();
                 }
                 toCheckWin = baseInstance.getSerialized2Dto1D((board));
                 if (baseInstance.isValidWinWinMove(toCheckWin)) {
@@ -87,7 +109,7 @@ public class MenaceBegin {
                         menaceWins++;
                         baseInstance.rewardSystem(moves, baseInstance.betaRewardWhenWin());
                     }
-                    logger.logMe((turn ? "Human: " : "Menace: ") + toCheckWin);
+                    logger.logMe((turn ? isUser ? "User" : "Human: " : "Menace: ") + toCheckWin);
                     break;
                 }
                 turn = !turn;
@@ -105,7 +127,7 @@ public class MenaceBegin {
             winsLoss.add(menaceWins);
             winsLoss.add(draw);
             results.put(String.valueOf(i), winsLoss);
-            logger.logMe("Result:" + i + "," + humanWins + "," + menaceWins + "," + draw );
+            logger.logMe("Result:" + i + "," + humanWins + "," + menaceWins + "," + draw);
         }
 
         CSV fileGenerator = new CSV();
