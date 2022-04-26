@@ -1,6 +1,4 @@
-import java.io.FileNotFoundException;
 import java.util.*;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class BaseState extends Utils {
     public BaseState() {
@@ -31,7 +29,7 @@ public class BaseState extends Utils {
         this.allRotations[7] = new int[]{2, 1, 0, 5, 4, 3, 8, 7, 6};
     }
 
-    private Boolean isAlreadyPresent(int[] combination, String toCompare) {
+    public Boolean isAlreadyPresent(int[] combination, String toCompare) {
         String str = "";
         for (int i = 0; i < combination.length; i++) {
             str += toCompare.charAt(combination[i]);
@@ -123,8 +121,9 @@ public class BaseState extends Utils {
      * 2 - Human
      *
      * @param track - a state of recursion
+     * @return
      */
-    public void compute(List<Integer> track) {
+    public Map<String, List<Integer>> compute(List<Integer> track) {
         if (track.size() == this.validLettersTTT) {
             Map<String, Object> data = this.verify(track);
             if (data.get("val").equals(true)) {
@@ -132,7 +131,7 @@ public class BaseState extends Utils {
                 if (!this.isValidWinWinMove(encoded) && this.isValidUniqueRotation(encoded))
                     this.allCombinations.put(encoded, getCustomSizeValue((List<Integer>) data.get("data")));
             }
-            return;
+            return null;
         }
 
         for (int i = 0; i < this.allMoves.length; i++) {
@@ -140,6 +139,7 @@ public class BaseState extends Utils {
             this.compute(track);
             track.remove(track.size() - 1);
         }
+        return null;
     }
 
 
@@ -298,6 +298,18 @@ public class BaseState extends Utils {
         }
     }
 
+    public int[][] getWinWinStates() {
+        return this.allWinWinStates;
+    }
+
+    public int[][] getAllRotations() {
+        return this.allRotations;
+    }
+
+    public Map<String, List<Integer>> getCombinations() {
+        return this.allCombinations;
+    }
+
     public int betaRewardWhenWin() {
         return this.addWhenWin;
     }
@@ -316,7 +328,7 @@ public class BaseState extends Utils {
     private Map<String, List<Integer>> allCombinations = new HashMap<>();
     private int[][] allRotations = new int[8][9];
 
-
+    // Configuration
     private int initialSizeAvailabilityArray = 10; //alpha
     private int addWhenWin = 3; //beta
     private int removeWhenLose = 1; //gamma
