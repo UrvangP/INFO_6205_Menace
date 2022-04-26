@@ -10,6 +10,13 @@ public class MenaceBegin {
         // Total no. of states in HashMap and writes those into a file
         System.out.println("total combinations: " + baseInstance.getAllCombinations().size());
 
+        int humanWins = 0;
+        int menaceWins = 0;
+        int draw = 0;
+
+        Map<String, Object> results = new HashMap<>();
+        Map<String, Object> beadGraph = new HashMap<>();
+
         for (int i = 0; i < totalGames; ++i) {
             Boolean turn = false; //MENACE
             /**
@@ -39,6 +46,24 @@ public class MenaceBegin {
                     }
                     // positionsToPlay - return an array with all valid positions allowed to play
                     List<Integer> positionsToPlay = baseInstance.getAllAvailablePositions(serial);
+
+                    int countPositions = 0;
+                    int countBeads = 0;
+                    for( int val : positionsToPlay ){
+                        if( val > 0) {
+                            countPositions++;
+                            countBeads += val;
+                        }
+
+                    }
+
+                    if(countPositions==7){
+                        //count
+                        List<Integer> beads = new ArrayList<>();
+                        beads.add(countBeads);
+                        beadGraph.put(String.valueOf(i), beads);
+                    }
+
                     // randomly pick from the available spots
                     int rand = baseInstance.pickRandomIndex(positionsToPlay, serial);
                     // moves - to keep a track on the game played
@@ -55,9 +80,11 @@ public class MenaceBegin {
                 if (baseInstance.isValidWinWinMove(toCheckWin)) {
                     if (turn) {
                         //subtract beads
+                        humanWins++;
                         baseInstance.rewardSystem(moves, -1 * baseInstance.gammaRewardWhenLose());
                     } else {
                         //add beads
+                        menaceWins++;
                         baseInstance.rewardSystem(moves, baseInstance.betaRewardWhenWin());
                     }
                     logger.logMe((turn ? "Human: " : "Menace: ") + toCheckWin);
@@ -69,12 +96,25 @@ public class MenaceBegin {
 
             if (chance == 9) {
                 baseInstance.rewardSystem(moves, baseInstance.deltaRewardWhenDraw());
+                draw++;
                 logger.logMe("Draw: " + baseInstance.getSerialized2Dto1D(board));
             }
+
+            List<Object> winsLoss = new ArrayList<>();
+            winsLoss.add(humanWins);
+            winsLoss.add(menaceWins);
+            winsLoss.add(draw);
+            results.put(String.valueOf(i), winsLoss);
+            logger.logMe("Result:" + i + "," + humanWins + "," + menaceWins + "," + draw );
         }
+
+        CSV fileGenerator = new CSV();
+        fileGenerator.generateCSV("winLoss", results);
+        fileGenerator.generateCSV("beadGraph", beadGraph);
+
         baseInstance.getAllCombinations();
     }
 
-    private final static int totalGames = 100;
+    private final static int totalGames = 500;
 }
 

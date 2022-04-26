@@ -22,6 +22,7 @@ public class Human {
         if (fork()) return true;
         if (forkBlock()) return true;
         if (isCenterEmpty()) return true;
+        if (oppositeCorner()) return true;
         if (isCornerEmpty()) return true;
         if (isSideEmpty()) return true;
 
@@ -288,5 +289,44 @@ public class Human {
         }
 
         return new int[]{-1, -1};
+    }
+
+    public boolean oppositeCorner(){
+        int[] counts = new int[2];
+        int pos = -1;
+        for( int i=0; i<3; ++i){
+            if(board[i][i] == 0 && i!=1){
+                counts[0]++;
+                pos = i;
+            }
+            if(board[i][i]==1 && i!=1){
+                counts[1]++;
+            }
+        }
+
+        if(pos!=-1 && counts[0]==1 && counts[1]==1){
+            board[pos][pos] = 2;
+            return true;
+        }
+
+        int posR = -1;
+        int posC = -1;
+        for( int i=0, j=2; i<3 && j>=0; ++i,--j){
+            if(Math.abs(i-j)==2 && board[i][i] == 0 && i!=1){
+                counts[0]++;
+                posR = i;
+                posC = j;
+            }
+            if(Math.abs(i-j)==2 && board[i][i]==1 && i!=1){
+                counts[1]++;
+            }
+        }
+
+        if(posR!=-1 && posC!=-1 && counts[0]==1 && counts[1]==1){
+            board[posR][posC] = 2;
+            return true;
+        }
+
+        return false;
     }
 }
