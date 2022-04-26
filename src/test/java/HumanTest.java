@@ -182,4 +182,24 @@ public class HumanTest {
         human.play();
         assertTrue(human.humanStrat());
     }
+
+    @Test
+    public void testOppCorner() {
+        Human human = new Human(new int[][]{{0, 0, 1}, {1, 2, 0}, {0, 0, 0}});
+        assertTrue(human.oppositeCorner());
+
+        human = new Human(new int[][]{{1, 0, 0}, {0, 2, 1}, {0, 0, 0}});
+        assertTrue(human.oppositeCorner());
+
+        human = new Human(new int[][]{{0, 0, 0}, {1, 2, 0}, {0, 0, 1}});
+        assertTrue(human.oppositeCorner());
+
+        human = new Human(new int[][]{{0, 0, 0}, {0, 2, 1}, {1, 0, 0}});
+        assertTrue(human.oppositeCorner());
+
+        human = new Human(new int[][]{{0, 0, 0}, {1, 0, 0}, {0, 0, 0}});
+        assertFalse(human.oppositeCorner());
+
+
+    }
 }

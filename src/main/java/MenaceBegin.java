@@ -57,7 +57,7 @@ public class MenaceBegin {
 
                     }
 
-                    if(countPositions==7){
+                    if(countPositions==9){
                         //count
                         List<Integer> beads = new ArrayList<>();
                         beads.add(countBeads);

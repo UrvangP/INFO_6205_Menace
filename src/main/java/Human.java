@@ -311,13 +311,14 @@ public class Human {
 
         int posR = -1;
         int posC = -1;
+        counts = new int[2];
         for( int i=0, j=2; i<3 && j>=0; ++i,--j){
-            if(Math.abs(i-j)==2 && board[i][i] == 0 && i!=1){
+            if(Math.abs(i-j)==2 && board[i][j] == 0 && i!=1){
                 counts[0]++;
                 posR = i;
                 posC = j;
             }
-            if(Math.abs(i-j)==2 && board[i][i]==1 && i!=1){
+            if(Math.abs(i-j)==2 && board[i][j]==1 && i!=1){
                 counts[1]++;
             }
         }
