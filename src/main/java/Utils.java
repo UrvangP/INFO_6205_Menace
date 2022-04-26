@@ -63,25 +63,4 @@ public class Utils {
         }
         return board;
     }
-
-    /**
-     * Generic Util
-     * To convert String to Array - Because JAVA sucks!
-     *
-     * @param state in the format of 0,1,2 Eg.010120102
-     * @return
-     */
-    public ArrayList<Integer> convertStringToArray(String state) {
-        List<Integer> board = new ArrayList<Integer>();
-        for (int i = 0; i < state.length(); i++) {
-            if (state.charAt(i) == '0') board.add(Integer.valueOf(state.charAt(i)));
-        }
-        return (ArrayList<Integer>) board;
-    }
-
-    public Integer getMenaceNextMove(){
-
-        return 0;
-    }
-
 }

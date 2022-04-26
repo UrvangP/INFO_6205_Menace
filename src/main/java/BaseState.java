@@ -20,14 +20,6 @@ public class BaseState extends Utils {
         this.allWinWinStates[7] = new int[]{6, 4, 2};
     }
 
-    private Boolean isAlreadyPresent(int[] combination, String toCompare) {
-        String str = "";
-        for (int i = 0; i < combination.length; i++) {
-            str += toCompare.charAt(combination[i]);
-        }
-        return this.allCombinations.containsKey(str);
-    }
-
     private void addAllRotations() {
         this.allRotations[0] = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8};
         this.allRotations[1] = new int[]{0, 3, 6, 1, 4, 7, 2, 5, 8};
@@ -39,6 +31,13 @@ public class BaseState extends Utils {
         this.allRotations[7] = new int[]{2, 1, 0, 5, 4, 3, 8, 7, 6};
     }
 
+    private Boolean isAlreadyPresent(int[] combination, String toCompare) {
+        String str = "";
+        for (int i = 0; i < combination.length; i++) {
+            str += toCompare.charAt(combination[i]);
+        }
+        return this.allCombinations.containsKey(str);
+    }
 
     public Boolean isValidUniqueRotation(String encoded) {
         for (int i = 0; i < this.allRotations.length; i++) {
@@ -158,7 +157,6 @@ public class BaseState extends Utils {
         temp.put("available", available);
 
         this.printCSV("combinations", temp);
-
         return this.allCombinations;
     }
 
