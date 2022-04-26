@@ -65,7 +65,7 @@ public class MenaceBegin {
                     }
 
                     // randomly pick from the available spots
-                    int rand = baseInstance.pickRandomIndex(positionsToPlay, serial);
+                    int rand = Utils.pickRandomIndex(positionsToPlay, serial);
                     // moves - to keep a track on the game played
                     moves.put(serial, rand);
                     logger.logMe("Board state " + baseInstance.getSerialized2Dto1D(board));

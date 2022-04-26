@@ -10,7 +10,41 @@ public class Human {
     }
 
     public void play() {
-        humanStrat();
+
+        int p = 8;
+        List<Integer> weights = new ArrayList<>();
+
+        weights.add(p);
+        weights.add(10-p);
+
+        String dummy = "00";
+
+        int index = Utils.pickRandomIndex(weights, dummy);
+
+//        System.out.println("P Index:" + Utils.pickRandomIndex(weights, dummy));
+
+        if(index == 0) humanStrat();
+        else playRandom();
+    }
+
+    public void playRandom(){
+
+        List<int[]> availableSpots = new ArrayList<>();
+
+        for( int i=0; i<board.length; ++i){
+            for( int j=0; j<board[0].length; ++j){
+                if(board[i][j] == 0){
+                    availableSpots.add( new int[]{i, j});
+                }
+            }
+        }
+
+        Random rand = new Random();
+        int ind = rand.nextInt(availableSpots.size());
+
+        int[] playSpot = availableSpots.get(ind);
+
+        board[playSpot[0]][playSpot[1]] = 2;
     }
 
     public boolean humanStrat() {

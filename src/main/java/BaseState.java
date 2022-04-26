@@ -265,37 +265,6 @@ public class BaseState extends Utils {
         return availablePositions;
     }
 
-
-    public int pickRandomIndex(List<Integer> options, String encoded) {
-        List<Integer> temp = new ArrayList<>();
-        for (int i = 0; i < encoded.length(); i++) {
-            if (encoded.charAt(i) == '0') {
-                temp.add(i);
-            }
-        }
-        List<Integer> temp1 = new ArrayList<>();
-        for (int i = 0; i < temp.size(); i++) {
-            temp1.add(options.get(temp.get(i)));
-        }
-        int[] w = new int[temp1.size()];
-        for (int i = 0; i < temp1.size(); i++) {
-            w[i] = temp1.get(i);
-        }
-        int[] prefixSums = new int[w.length];
-        int prefixSum = 0;
-        for (int i = 0; i < w.length; ++i) {
-            prefixSum += w[i];
-            prefixSums[i] = prefixSum;
-        }
-        int totalSum = prefixSum;
-        double target = totalSum * Math.random();
-        int i = 0;
-        for (; i < prefixSums.length; ++i) {
-            if (target < prefixSums[i]) return temp.get(i);
-        }
-        return temp.get(i - 1);
-    }
-
     public void readAndSaveCSV() {
         CSV csvInstance = new CSV();
         this.allCombinations = csvInstance.readCSV();
