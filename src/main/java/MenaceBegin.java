@@ -32,6 +32,7 @@ public class MenaceBegin {
                     if (!baseInstance.getAllCombinations().containsKey(serial) && chance < 7) {
                         // validCombination - is the appropriate state
                         String validCombination = baseInstance.getValidCombination(serial);
+                        logger.logMe("Board mirror found " + serial + "->" + validCombination);
                         serial = validCombination;
                         // replace the board based on appropriate state
                         baseInstance.getNewConfigBoard(board, serial);
@@ -42,9 +43,12 @@ public class MenaceBegin {
                     int rand = baseInstance.pickRandomIndex(positionsToPlay, serial);
                     // moves - to keep a track on the game played
                     moves.put(serial, rand);
+                    logger.logMe("Board state " + baseInstance.getSerialized2Dto1D(board));
+                    logger.logMe("Menace played " + (int) Math.floor(rand / 3) + ", " + rand % 3);
                     // mark the menace move on the board
                     board[(int) Math.floor(rand / 3)][rand % 3] = 1;
                 } else {
+                    logger.logMe("Board state " + baseInstance.getSerialized2Dto1D(board));
                     human.play();
                 }
                 toCheckWin = baseInstance.getSerialized2Dto1D((board));
