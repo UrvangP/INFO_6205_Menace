@@ -93,9 +93,16 @@ public class BaseState extends Utils {
     }
 
 
+    /**
+     * MENACE
+     * getCustomSizeValue()
+     * This is to initialize the value and allocate specific beats to each available
+     * slot index
+     *
+     * @param data
+     * @return
+     */
     public List<Integer> getCustomSizeValue(List<Integer> data) {
-        //if (data.size() == (this.initialSizeAvailabilityArray)) return data;
-
         List<Integer> value = new ArrayList<Integer>();
 
         for (int i = 0; i < this.validLettersTTT; i++) {

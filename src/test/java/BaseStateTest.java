@@ -97,23 +97,23 @@ public class BaseStateTest {
     }
 
     @Test
-    public void testBetaRewardWhenWinCase() {
+    public void testGetCustomSizeValueCase() {
         BaseState baseState = new BaseState();
-        int alpha = baseState.betaRewardWhenWin();
-        assertTrue(alpha >= 0);
+        List<Integer> positionsAvailable = new ArrayList<>();
+        positionsAvailable.add(3);
+        positionsAvailable.add(5);
+        positionsAvailable.add(7);
+        List<Integer> availableSpots = baseState.getCustomSizeValue(positionsAvailable);
+        assertTrue(availableSpots.size() == 9);
     }
 
     @Test
-    public void testGammaRewardWhenLoseCase() {
+    public void testRewardSystemCase() {
         BaseState baseState = new BaseState();
-        int gamma = baseState.gammaRewardWhenLose();
-        assertTrue(gamma >= 0);
-    }
-
-    @Test
-    public void testDeltaRewardWhenDrawCase() {
-        BaseState baseState = new BaseState();
-        int delta = baseState.deltaRewardWhenDraw();
-        assertTrue(delta >= 0);
+        Map<String, Integer> path = new HashMap<>();
+        path.put("000000000", 0);
+        baseState.rewardSystem(path, 1);
+        List<Integer> temp = baseState.getAllAvailablePositions("000000000");
+        assertTrue(temp.get(0) > 0);
     }
 }
