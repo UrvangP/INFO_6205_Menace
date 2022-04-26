@@ -1,19 +1,16 @@
 import java.util.*;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 public class MenaceBegin {
 
     public static void main(String[] args) {
+        // Initializes the Base Class
         BaseState baseInstance = new BaseState();
-
-        Logger logger = LoggerFactory.getLogger(MenaceBegin.class);
-
+        // Initializes the MenaceLogger
+        MenaceLogger logger = new MenaceLogger();
+        // Total no. of states in HashMap and writes those into a file
         System.out.println("total combinations: " + baseInstance.getAllCombinations().size());
-        int menace = 0;
-        int humanC = 0;
-        for (int i = 0; i < 10000; ++i) {
+
+        for (int i = 0; i < totalGames; ++i) {
             Boolean turn = false; //MENACE
             /**
              * MENACE - 1
@@ -43,7 +40,6 @@ public class MenaceBegin {
                     List<Integer> positionsToPlay = baseInstance.getAllAvailablePositions(serial);
                     // randomly pick from the available spots
                     int rand = baseInstance.pickRandomIndex(positionsToPlay, serial);
-                    System.out.println("rand" + serial + "|" + rand);
                     // moves - to keep a track on the game played
                     moves.put(serial, rand);
                     // mark the menace move on the board
@@ -60,11 +56,7 @@ public class MenaceBegin {
                         //add beads
                         baseInstance.rewardSystem(moves, baseInstance.betaRewardWhenWin());
                     }
-                    logger.info((turn ? "Human:" : "Menace:") + "Win!!" + toCheckWin);
-
-                    System.out.println((turn ? "Human:" : "Menace:") + "Win!!" + toCheckWin);
-                    if (turn) humanC++;
-                    else menace++;
+                    logger.logMe((turn ? "Human: " : "Menace: ") + toCheckWin);
                     break;
                 }
                 turn = !turn;
@@ -72,17 +64,13 @@ public class MenaceBegin {
             }
 
             if (chance == 9) {
-                // Draw
                 baseInstance.rewardSystem(moves, baseInstance.deltaRewardWhenDraw());
-                System.out.println("Draw!!" + toCheckWin);
-                logger.info("Draw: " + String.valueOf(board));
-
+                logger.logMe("Draw: " + baseInstance.getSerialized2Dto1D(board));
             }
         }
-
-
-        System.out.println(menace + "v/s" + humanC);
         baseInstance.getAllCombinations();
     }
+
+    private final static int totalGames = 100;
 }
 

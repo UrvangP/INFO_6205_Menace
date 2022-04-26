@@ -317,8 +317,8 @@ public class BaseState extends Utils {
     private int[][] allRotations = new int[8][9];
 
 
-    private int initialSizeAvailabilityArray = 100; //alpha
-    private int addWhenWin = 8; //beta
+    private int initialSizeAvailabilityArray = 10; //alpha
+    private int addWhenWin = 3; //beta
     private int removeWhenLose = 1; //gamma
-    private int addWhenDraw = 5; //delta
+    private int addWhenDraw = 2; //delta
 }
