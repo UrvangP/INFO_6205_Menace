@@ -1,10 +1,8 @@
 import org.junit.Test;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import java.util.*;
+
+import static org.junit.Assert.*;
 
 public class BaseStateTest {
 
@@ -57,5 +55,65 @@ public class BaseStateTest {
         BaseState baseState = new BaseState();
         baseState.compute(new ArrayList<Integer>());
         assertTrue(baseState.getCombinations().size() > 0);
+    }
+
+    @Test
+    public void testGetAllCombinationsCase() {
+        BaseState baseState = new BaseState();
+        assertFalse(baseState.getCombinations().size() < 0);
+        Map<String, List<Integer>> combinations = baseState.getAllCombinations();
+        assertTrue(combinations.size() > 0);
+    }
+
+    @Test
+    public void testCheckMirrorImagesValidPositionsCase() {
+        BaseState baseState = new BaseState();
+        List<Integer> empty = baseState.checkMirrorImagesValidPositions("000000001");
+        assertTrue(empty.size() > 0);
+    }
+
+    @Test
+    public void testGetAllAvailablePositionsCase() {
+        BaseState baseState = new BaseState();
+        List<Integer> emptyStates = baseState.checkMirrorImagesValidPositions("000000001");
+        assertTrue(emptyStates.size() > 0);
+    }
+
+    @Test
+    public void testGetValidCombinationCase() {
+        BaseState baseState = new BaseState();
+        String mirrorCombination = baseState.getValidCombination("002021001");
+        assertEquals(mirrorCombination, "000020112");
+        mirrorCombination = baseState.getValidCombination("000021001");
+        assertEquals(mirrorCombination, mirrorCombination);
+    }
+
+    @Test
+    public void testGetNewConfigBoardCase() {
+        BaseState baseState = new BaseState();
+        int[][] board = new int[][]{{0, 0, 2}, {0, 2, 1}, {0, 0, 1}};
+        baseState.getNewConfigBoard(board, "000020112");
+        assertTrue(Arrays.deepEquals(board, new int[][]{{0, 0, 0}, {0, 2, 0}, {1, 1, 2}}));
+    }
+
+    @Test
+    public void testBetaRewardWhenWinCase() {
+        BaseState baseState = new BaseState();
+        int alpha = baseState.betaRewardWhenWin();
+        assertTrue(alpha >= 0);
+    }
+
+    @Test
+    public void testGammaRewardWhenLoseCase() {
+        BaseState baseState = new BaseState();
+        int gamma = baseState.gammaRewardWhenLose();
+        assertTrue(gamma >= 0);
+    }
+
+    @Test
+    public void testDeltaRewardWhenDrawCase() {
+        BaseState baseState = new BaseState();
+        int delta = baseState.deltaRewardWhenDraw();
+        assertTrue(delta >= 0);
     }
 }

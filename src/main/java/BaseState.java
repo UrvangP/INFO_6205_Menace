@@ -187,7 +187,6 @@ public class BaseState extends Utils {
      * @param state
      * @return
      */
-    //TODO - if not present then what ?
     public List<Integer> getAllAvailablePositions(String state) {
         if (!this.allCombinations.containsKey(state)) return checkMirrorImagesValidPositions(state);
         return (List<Integer>) this.allCombinations.get(state);
