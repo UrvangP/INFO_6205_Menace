@@ -297,6 +297,10 @@ public class BaseState extends Utils {
         return this.addWhenDraw;
     }
 
+    public int alphaWhenStart(){
+        return this.initialSizeAvailabilityArray;
+    }
+
     private int[][] allWinWinStates = new int[8][3];
     private Integer[] allMoves = new Integer[]{0, 1, 2};
     private Integer validLettersTTT = 9;

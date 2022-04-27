@@ -4,14 +4,20 @@ public class Human {
 
     int[][] board;
     private final MenaceLogger logger = new MenaceLogger();
+    int prob = 9;
 
     public Human(int[][] data) {
         board = data;
     }
+    public Human(){}
+
+    public int getProbability(){
+        return this.prob;
+    }
 
     public void play() {
 
-        int p = 8;
+        int p = 9;
         List<Integer> weights = new ArrayList<>();
 
         weights.add(p);
@@ -68,7 +74,7 @@ public class Human {
         int[] pos = horizontalWin(2);
 
         if (pos[0] != -1 && pos[1] != -1) {
-            logger.logMe("Human played " + pos[0] + ", " + pos[1]);
+            //logger.logMe("Human played " + pos[0] + ", " + pos[1]);
             board[pos[0]][pos[1]] = 2;
             return true;
         }
@@ -81,7 +87,7 @@ public class Human {
         int[] pos = verticalWin(2);
 
         if (pos[0] != -1 && pos[1] != -1) {
-            logger.logMe("Human played " + pos[0] + ", " + pos[1]);
+            //logger.logMe("Human played " + pos[0] + ", " + pos[1]);
             board[pos[0]][pos[1]] = 2;
             return true;
         }
@@ -94,7 +100,7 @@ public class Human {
         int[] pos = diagonalWin(2);
 
         if (pos[0] != -1 && pos[1] != -1) {
-            logger.logMe("Human played " + pos[0] + ", " + pos[1]);
+            //logger.logMe("Human played " + pos[0] + ", " + pos[1]);
             board[pos[0]][pos[1]] = 2;
             return true;
         }
@@ -108,7 +114,7 @@ public class Human {
         pos = horizontalWin(1);
 
         if (pos[0] != -1 && pos[1] != -1) {
-            logger.logMe("Human played " + pos[0] + ", " + pos[1]);
+            //logger.logMe("Human played " + pos[0] + ", " + pos[1]);
 
             board[pos[0]][pos[1]] = 2;
             return true;
@@ -117,7 +123,7 @@ public class Human {
         pos = verticalWin(1);
 
         if (pos[0] != -1 && pos[1] != -1) {
-            logger.logMe("Human played " + pos[0] + ", " + pos[1]);
+            //logger.logMe("Human played " + pos[0] + ", " + pos[1]);
 
             board[pos[0]][pos[1]] = 2;
             return true;
@@ -126,7 +132,7 @@ public class Human {
         pos = diagonalWin(1);
 
         if (pos[0] != -1 && pos[1] != -1) {
-            logger.logMe("Human played " + pos[0] + ", " + pos[1]);
+            //logger.logMe("Human played " + pos[0] + ", " + pos[1]);
 
             board[pos[0]][pos[1]] = 2;
             return true;
@@ -139,26 +145,26 @@ public class Human {
 
         if (board[0][0] == 2 && board[2][2] == 2 && board[1][1] == 1) {
             if (board[0][2] == 1 && board[2][0] == 0) {
-                logger.logMe("Human played " + 2 + ", " + 0);
+                //logger.logMe("Human played " + 2 + ", " + 0);
 
                 board[2][0] = 2;
                 return true;
             }
             if (board[0][2] == 0 && board[2][0] == 1) {
-                logger.logMe("Human played " + 0 + ", " + 2);
+                //logger.logMe("Human played " + 0 + ", " + 2);
 
                 board[0][2] = 2;
                 return true;
             }
         } else if (board[0][2] == 2 && board[2][0] == 2 && board[1][1] == 1) {
             if (board[0][0] == 1 && board[2][2] == 0) {
-                logger.logMe("Human played " + 2 + ", " + 2);
+                //logger.logMe("Human played " + 2 + ", " + 2);
 
                 board[2][2] = 2;
                 return true;
             }
             if (board[0][0] == 0 && board[2][2] == 1) {
-                logger.logMe("Human played " + 0 + ", " + 0);
+                //logger.logMe("Human played " + 0 + ", " + 0);
 
                 board[0][0] = 2;
                 return true;
@@ -184,7 +190,7 @@ public class Human {
     public boolean isCenterEmpty() {
 
         if (board[1][1] == 0) {
-            logger.logMe("Human played " + 1 + ", " + 1);
+            //logger.logMe("Human played " + 1 + ", " + 1);
 
             board[1][1] = 2;
             return true;
@@ -214,7 +220,7 @@ public class Human {
             Random rand = new Random();
             int val = rand.nextInt(empty.size());
             int[] index = empty.get(val);
-            logger.logMe("Human played " + index[0] + ", " + index[1]);
+            //logger.logMe("Human played " + index[0] + ", " + index[1]);
 
             board[index[0]][index[1]] = 2;
             return true;
@@ -239,7 +245,7 @@ public class Human {
             Random rand = new Random();
             int val = rand.nextInt(empty.size());
             int[] index = empty.get(val);
-            logger.logMe("Human played " + index[0] + ", " + index[1]);
+            //logger.logMe("Human played " + index[0] + ", " + index[1]);
 
             board[index[0]][index[1]] = 2;
             return true;

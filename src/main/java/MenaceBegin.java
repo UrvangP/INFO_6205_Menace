@@ -11,7 +11,9 @@ public class MenaceBegin {
         // Initializes the MenaceLogger
         MenaceLogger logger = new MenaceLogger();
         // Total no. of states in HashMap and writes those into a file
-        System.out.println("total combinations: " + baseInstance.getAllCombinations().size());
+        //System.out.println("total combinations: " + baseInstance.getAllCombinations().size());
+
+        Human human = new Human();
 
         int humanWins = 0;
         int menaceWins = 0;
@@ -19,6 +21,9 @@ public class MenaceBegin {
 
         Map<String, Object> results = new HashMap<>();
         Map<String, Object> beadGraph = new HashMap<>();
+
+        logger.logMe(("Menace Training"));
+        logger.logMe("Config: Rewards: " + baseInstance.betaRewardWhenWin() + ", Punish: " + baseInstance.gammaRewardWhenLose() + ", Draw: " + baseInstance.deltaRewardWhenDraw() + ", Inital: " + baseInstance.alphaWhenStart() + ", Probability: " + human.getProbability());
 
         for (int i = 0; i < (isUser ? 1 : totalGames); ++i) {
             Boolean turn = false; //MENACE
@@ -31,7 +36,7 @@ public class MenaceBegin {
 
 
             Map<String, Integer> moves = new HashMap<>();
-            Human human = new Human(board);
+            human = new Human(board);
             int chance = 0;
 
             String toCheckWin = "";
@@ -44,7 +49,7 @@ public class MenaceBegin {
                     if (!baseInstance.getAllCombinations().containsKey(serial) && chance < 7) {
                         // validCombination - is the appropriate state
                         String validCombination = baseInstance.getValidCombination(serial);
-                        logger.logMe("Board mirror found " + serial + "->" + validCombination);
+                        //logger.logMe("Board mirror found " + serial + "->" + validCombination);
                         serial = validCombination;
                         // replace the board based on appropriate state
                         baseInstance.getNewConfigBoard(board, serial);
@@ -73,12 +78,12 @@ public class MenaceBegin {
                     int rand = Utils.pickRandomIndex(positionsToPlay, serial);
                     // moves - to keep a track on the game played
                     moves.put(serial, rand);
-                    logger.logMe("Board state " + baseInstance.getSerialized2Dto1D(board));
-                    logger.logMe("Menace played " + (int) Math.floor(rand / 3) + ", " + rand % 3);
+                    //logger.logMe("Board state " + baseInstance.getSerialized2Dto1D(board));
+                    //logger.logMe("Menace played " + (int) Math.floor(rand / 3) + ", " + rand % 3);
                     // mark the menace move on the board
                     board[(int) Math.floor(rand / 3)][rand % 3] = 1;
                 } else {
-                    logger.logMe("Board state " + baseInstance.getSerialized2Dto1D(board));
+                    //logger.logMe("Board state " + baseInstance.getSerialized2Dto1D(board));
 
                     if (isUser) {
                         for (int k = 0; k < 3; k++) {
@@ -109,7 +114,7 @@ public class MenaceBegin {
                         menaceWins++;
                         baseInstance.rewardSystem(moves, baseInstance.betaRewardWhenWin());
                     }
-                    logger.logMe((turn ? isUser ? "User" : "Human: " : "Menace: ") + toCheckWin);
+                    //logger.logMe((turn ? isUser ? "User" : "Human: " : "Menace: ") + toCheckWin);
                     break;
                 }
                 turn = !turn;
@@ -119,7 +124,7 @@ public class MenaceBegin {
             if (chance == 9) {
                 baseInstance.rewardSystem(moves, baseInstance.deltaRewardWhenDraw());
                 draw++;
-                logger.logMe("Draw: " + baseInstance.getSerialized2Dto1D(board));
+                //logger.logMe("Draw: " + baseInstance.getSerialized2Dto1D(board));
             }
 
             List<Object> winsLoss = new ArrayList<>();
@@ -127,9 +132,10 @@ public class MenaceBegin {
             winsLoss.add(menaceWins);
             winsLoss.add(draw);
             results.put(String.valueOf(i), winsLoss);
-            logger.logMe("Result:" + i + "," + humanWins + "," + menaceWins + "," + draw);
         }
 
+
+        logger.logMe("Result: Games Played: " + totalGames + ", Human Wins: " + humanWins + ", Menace Wins: " + menaceWins + ", Draw Games: " + draw);
         CSV fileGenerator = new CSV();
         fileGenerator.generateCSV("winLoss", results);
         fileGenerator.generateCSV("beadGraph", beadGraph);
