@@ -251,7 +251,8 @@ public class BaseState extends Utils {
         for (String s : path.keySet()) {
             List<Integer> beads = this.getAllAvailablePositions(s);
             int step = path.get(s);
-            beads.set(step, beads.get(step) + reward);
+            int newVal = beads.get(step) + reward;
+            beads.set(step, Math.max(newVal,0));
         }
     }
 

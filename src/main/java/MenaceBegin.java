@@ -49,7 +49,7 @@ public class MenaceBegin {
                     if (!baseInstance.getAllCombinations().containsKey(serial) && chance < 7) {
                         // validCombination - is the appropriate state
                         String validCombination = baseInstance.getValidCombination(serial);
-                        //logger.logMe("Board mirror found " + serial + "->" + validCombination);
+                        logger.logMe("Board mirror found " + serial + "->" + validCombination);
                         serial = validCombination;
                         // replace the board based on appropriate state
                         baseInstance.getNewConfigBoard(board, serial);
@@ -57,17 +57,14 @@ public class MenaceBegin {
                     // positionsToPlay - return an array with all valid positions allowed to play
                     List<Integer> positionsToPlay = baseInstance.getAllAvailablePositions(serial);
 
-                    int countPositions = 0;
                     int countBeads = 0;
                     for (int val : positionsToPlay) {
                         if (val > 0) {
-                            countPositions++;
                             countBeads += val;
                         }
-
                     }
 
-                    if (countPositions == 9) {
+                    if ("000000000".equals(serial)) {
                         //count
                         List<Integer> beads = new ArrayList<>();
                         beads.add(countBeads);
@@ -78,12 +75,12 @@ public class MenaceBegin {
                     int rand = Utils.pickRandomIndex(positionsToPlay, serial);
                     // moves - to keep a track on the game played
                     moves.put(serial, rand);
-                    //logger.logMe("Board state " + baseInstance.getSerialized2Dto1D(board));
-                    //logger.logMe("Menace played " + (int) Math.floor(rand / 3) + ", " + rand % 3);
+                    logger.logMe("Board state " + baseInstance.getSerialized2Dto1D(board));
+                    logger.logMe("Menace played " + (int) Math.floor(rand / 3) + ", " + rand % 3);
                     // mark the menace move on the board
                     board[(int) Math.floor(rand / 3)][rand % 3] = 1;
                 } else {
-                    //logger.logMe("Board state " + baseInstance.getSerialized2Dto1D(board));
+                    logger.logMe("Board state " + baseInstance.getSerialized2Dto1D(board));
 
                     if (isUser) {
                         for (int k = 0; k < 3; k++) {
@@ -114,7 +111,7 @@ public class MenaceBegin {
                         menaceWins++;
                         baseInstance.rewardSystem(moves, baseInstance.betaRewardWhenWin());
                     }
-                    //logger.logMe((turn ? isUser ? "User" : "Human: " : "Menace: ") + toCheckWin);
+                    logger.logMe((turn ? isUser ? "User" : "Human: " : "Menace: ") + toCheckWin);
                     break;
                 }
                 turn = !turn;
@@ -124,7 +121,7 @@ public class MenaceBegin {
             if (chance == 9) {
                 baseInstance.rewardSystem(moves, baseInstance.deltaRewardWhenDraw());
                 draw++;
-                //logger.logMe("Draw: " + baseInstance.getSerialized2Dto1D(board));
+                logger.logMe("Draw: " + baseInstance.getSerialized2Dto1D(board));
             }
 
             List<Object> winsLoss = new ArrayList<>();
