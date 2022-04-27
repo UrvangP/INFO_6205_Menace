@@ -3,7 +3,6 @@ import java.util.*;
 public class MenaceBegin {
 
     public static void main(String[] args) {
-        System.out.println("args" + args);
         Boolean isUser = args.length > 0 ? Boolean.parseBoolean(args[0]) : false;
         Scanner humanTurnInput = new Scanner(System.in);
         // Initializes the Base Class
@@ -11,7 +10,7 @@ public class MenaceBegin {
         // Initializes the MenaceLogger
         MenaceLogger logger = new MenaceLogger();
         // Total no. of states in HashMap and writes those into a file
-        //System.out.println("total combinations: " + baseInstance.getAllCombinations().size());
+        System.out.println("Total combinations: " + baseInstance.getAllCombinations().size());
 
         Human human = new Human();
 
