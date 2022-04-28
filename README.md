@@ -5,8 +5,7 @@ NUID	    | Name	            | Email
 002139730	| Prathamesh Nemade	| nemade.p@northeastern.edu
 001568243	| Urvang Patel	    | patel.ur@northeastern.edu
 
-
-          To develop a MENACE machine that excels in the game of tic-tac-toe. The hashtables of a machine are modeled and trained by playing "n" games against a human/optimal strategy. Based on results of the games, make improvements to a model.
+To develop a MENACE machine that excels in the game of tic-tac-toe. The hashtables of a machine are modeled and trained by playing "n" games against a human/optimal strategy. Based on results of the games, make improvements to a model.
 
 To start the game:
 1. Execute MenaceBegin.java (this includes the main method).
