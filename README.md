@@ -2,7 +2,7 @@
 
 
 | NUID	    | Name	            | Email |
-| --- | --- |
+| :------------  | :---: | --------: |
 | 002139730	| Prathamesh Nemade	| nemade.p@northeastern.edu |
 | 001568243	| Urvang Patel	    | patel.ur@northeastern.edu |
 
